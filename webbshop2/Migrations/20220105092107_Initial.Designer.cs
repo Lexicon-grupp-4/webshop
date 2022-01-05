@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webbshop2.Data;
 
 namespace webbshop2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220105092107_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,15 +27,15 @@ namespace webbshop2.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Antal")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -43,30 +45,30 @@ namespace webbshop2.Migrations
                         new
                         {
                             Id = 1,
+                            Antal = 20,
                             Name = "Hammare",
-                            Price = 100f,
-                            Quantity = 20
+                            Price = 100f
                         },
                         new
                         {
                             Id = 2,
+                            Antal = 3,
                             Name = "Borrmaskin",
-                            Price = 2000f,
-                            Quantity = 3
+                            Price = 2000f
                         },
                         new
                         {
                             Id = 3,
+                            Antal = 120,
                             Name = "Såg",
-                            Price = 300f,
-                            Quantity = 120
+                            Price = 300f
                         },
                         new
                         {
                             Id = 4,
+                            Antal = 300,
                             Name = "Skruvmejsel",
-                            Price = 250f,
-                            Quantity = 300
+                            Price = 250f
                         });
                 });
 #pragma warning restore 612, 618

@@ -16,6 +16,6 @@ namespace webbshop2.Models
 
         public float Price { get; set; }
 
-        public int Antal { get; set; }
+        public int Quantity { get; set; }
     }
 }
