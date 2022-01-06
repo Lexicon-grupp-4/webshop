@@ -61,25 +61,25 @@ namespace webbshop2.Controllers
             return Ok(new{ jwt, user });
         }
 
-        [HttpGet("user")]
-        public IActionResult User(string jwt)
-        {
-            // TODO the jwt should come from a header
-            try
-            {
-                var token = new JwtService().Verify(jwt);
-                if (token != null)
-                {
-                    int id = int.Parse(token.Issuer);
-                    var user = _userService.GetUserById(id);
-                    return Ok(user);
-                }
-            }
-            catch (Exception )
-            {
-                return Unauthorized();
-            }
-            return BadRequest();
-        }
+        //[HttpGet("user")]
+        //public IActionResult User(string jwt)
+        //{
+        //    // TODO the jwt should come from a header
+        //    try
+        //    {
+        //        var token = new JwtService().Verify(jwt);
+        //        if (token != null)
+        //        {
+        //            int id = int.Parse(token.Issuer);
+        //            var user = _userService.GetUserById(id);
+        //            return Ok(user);
+        //        }
+        //    }
+        //    catch (Exception )
+        //    {
+        //        return Unauthorized();
+        //    }
+        //    return BadRequest();
+        //}
     }
 }
