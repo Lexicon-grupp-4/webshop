@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using webbshop2.Authentication;
 using webbshop2.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace webbshop2.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -15,8 +18,12 @@ namespace webbshop2.Data
 
         public DbSet<Product> Products { get; set; }
 
+        //public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Product>().HasData(new Product { Id = 1, Name = "Hammare", Price = 100, Quantity = 20 ,PictureUrl = "/images/products/p.png",Description="description",Brand="brand",Type="type" });
             modelBuilder.Entity<Product>().HasData(new Product { Id = 2, Name = "Köttbulletång", Price = 210, Quantity = 6,PictureUrl = "/images/products/p.png" ,Description="description",Brand="brand",Type="type" });
             modelBuilder.Entity<Product>().HasData(new Product { Id = 3, Name = "Borrmaskin", Price = 2000, Quantity = 3 ,PictureUrl = "/images/products/p.png",Description="description",Brand="brand",Type="type" });
