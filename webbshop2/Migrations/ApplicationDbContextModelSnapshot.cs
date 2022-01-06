@@ -222,15 +222,27 @@ namespace webbshop2.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Antal")
-                        .HasColumnType("int");
+                    b.Property<string>("Brand")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<float>("Price")
                         .HasColumnType("real");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -240,30 +252,57 @@ namespace webbshop2.Migrations
                         new
                         {
                             Id = 1,
-                            Antal = 20,
+                            Brand = "brand",
+                            Description = "description",
                             Name = "Hammare",
-                            Price = 100f
+                            PictureUrl = "/images/products/p.png",
+                            Price = 100f,
+                            Quantity = 20,
+                            Type = "type"
                         },
                         new
                         {
                             Id = 2,
-                            Antal = 3,
-                            Name = "Borrmaskin",
-                            Price = 2000f
+                            Brand = "brand",
+                            Description = "description",
+                            Name = "Köttbulletång",
+                            PictureUrl = "/images/products/p.png",
+                            Price = 210f,
+                            Quantity = 6,
+                            Type = "type"
                         },
                         new
                         {
                             Id = 3,
-                            Antal = 120,
-                            Name = "Såg",
-                            Price = 300f
+                            Brand = "brand",
+                            Description = "description",
+                            Name = "Borrmaskin",
+                            PictureUrl = "/images/products/p.png",
+                            Price = 2000f,
+                            Quantity = 3,
+                            Type = "type"
                         },
                         new
                         {
                             Id = 4,
-                            Antal = 300,
+                            Brand = "brand",
+                            Description = "description",
                             Name = "Skruvmejsel",
-                            Price = 250f
+                            PictureUrl = "/images/products/p.png",
+                            Price = 250f,
+                            Quantity = 300,
+                            Type = "type"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Brand = "brand",
+                            Description = "description",
+                            Name = "Såg",
+                            PictureUrl = "/images/products/p.png",
+                            Price = 300f,
+                            Quantity = 120,
+                            Type = "type"
                         });
                 });
 

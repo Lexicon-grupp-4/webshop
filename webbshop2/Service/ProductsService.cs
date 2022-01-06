@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using webbshop2.Data;
 using webbshop2.Models;
@@ -9,7 +8,8 @@ namespace webbshop2.Service
 {
     public interface IProductsService
     {
-        List<Product> GetProducts();
+        Task<List<Product>> GetProducts();
+        Task<Product>  GetProduct(int id);
     }
 
     public class ProductsService: IProductsService
@@ -21,9 +21,14 @@ namespace webbshop2.Service
             _context = context;
         }
 
-        public List<Product> GetProducts()
+        public async Task<Product> GetProduct(int id)
         {
-            return _context.Products.ToList();
+            return await _context.Products.FindAsync(id);
+        }
+
+        public async Task<List<Product>> GetProducts()
+        {
+            return await _context.Products.ToListAsync();
         }
     }
 }

@@ -14,6 +14,7 @@ export interface Product {
     id: number;
     name: number;
     price: number;
+    quantity:number;
 }
 
 // -----------------
@@ -75,7 +76,6 @@ export const reducer: Reducer<ProductsState> = (state: ProductsState | undefined
                 products: action.products,
                 isLoading: false
             };
-            break;
     }
 
     return state;
