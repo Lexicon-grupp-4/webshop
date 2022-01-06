@@ -21,9 +21,14 @@ namespace webbshop2.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Product> Get()
+        public async Task<IEnumerable<Product>> Get()
         {
-            return _productsService.GetProducts();
+            return await _productsService.GetProducts();
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Product>> GetProduct(int id)
+        {
+            return await _productsService.GetProduct(id);
         }
     }
 }
