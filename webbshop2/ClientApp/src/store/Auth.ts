@@ -54,6 +54,7 @@ export const actionCreators = {
                 .then(data => {
                   console.log('222')
                     dispatch({ type: 'LOGIN_SUCCESS', jwt: data.jwt, user: data.user });
+                    sessionStorage.setItem('jwt', data.jwt);
                 });
 
             dispatch({ type: 'ATTEMPT_LOGIN' });

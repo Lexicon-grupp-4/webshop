@@ -1,49 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Threading.Tasks;
-using webbshop2.Data;
-using webbshop2.Models;
+using webbshop2.Authentication;
+using webbshop2.Dtos;
 
 namespace webbshop2.Service
 {
     public interface IUserService
     {
-        User Create(User user);
-        User GetUserByEmail(string email);
-        User GetUserById(int Id);
+        Task<ApplicationUser> Create(RegisterDto user);
     }
 
     public class UserService : IUserService
     {
-        readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public UserService(ApplicationDbContext context)
+        public UserService(UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            this.userManager = userManager;
         }
 
-        public User Create(User user)
+        public async Task<ApplicationUser> Create(RegisterDto model)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            ApplicationUser userExists = await userManager.FindByNameAsync(model.Email);
+            if (userExists != null)
+            {
+                throw new ServiceException(String.Format("user {0} already existing ", model.Name));
+            }
+
+            ApplicationUser user = new ApplicationUser()
+            {
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = model.Email
+            };
+            var result = await userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+            {
+                throw new ServiceException("failed to create account");
+            }
             return user;
-        }
-
-        public User GetUserByEmail(string email)
-        {
-            // TODO dont leak password out of service layer
-            return _context.Users
-                .Where(b => b.Email == email)
-                .FirstOrDefault();
-        }
-
-        public User GetUserById(int Id)
-        {
-            // TODO dont leak password out of service layer
-            return _context.Users
-                .Where(b => b.Id == Id)
-                .FirstOrDefault();
         }
     }
 }
