@@ -10,8 +10,8 @@ using webbshop2.Data;
 namespace webbshop2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220106230543_initialCreate")]
-    partial class initialCreate
+    [Migration("20220108142406_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,6 +46,22 @@ namespace webbshop2.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "7a274fea-5a74-4b08-b713-996c2a4da200",
+                            ConcurrencyStamp = "82261118-f4a2-410b-a505-0abc05c50f0b",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "cdcaa373-39c4-4c9d-ada2-af67cead244f",
+                            ConcurrencyStamp = "cdcaa373-39c4-4c9d-ada2-af67cead244f",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -131,6 +147,23 @@ namespace webbshop2.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "33734c07-3f1a-4b37-8330-5e947c2a9d57",
+                            RoleId = "cdcaa373-39c4-4c9d-ada2-af67cead244f"
+                        },
+                        new
+                        {
+                            UserId = "577d7a59-0221-4bb7-be67-3bbaad46022c",
+                            RoleId = "7a274fea-5a74-4b08-b713-996c2a4da200"
+                        },
+                        new
+                        {
+                            UserId = "ff92bb06-898e-4f2d-815f-50b00fb9793d",
+                            RoleId = "7a274fea-5a74-4b08-b713-996c2a4da200"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -215,6 +248,56 @@ namespace webbshop2.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "33734c07-3f1a-4b37-8330-5e947c2a9d57",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "697e2c0e-ec25-43e5-9bd1-ceecf0751f0b",
+                            Email = "admin@mail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@MAIL.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAENOinM9VCukuhFocb5q4uKg6YyqXUfPmTjNYp9s39yO/i3UbieyWLon9JXTeeZvfSw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "JLWGJISJQWEYTH3BZGOBFQTWVPHLCGMJ",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
+                        },
+                        new
+                        {
+                            Id = "577d7a59-0221-4bb7-be67-3bbaad46022c",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "7d1278d2-5d20-4751-ba32-f7583a77378b",
+                            Email = "user10@mail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER10@MAIL.COM",
+                            NormalizedUserName = "USER10",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGrOtfDoRSMoDzZIJQezM2L6RZT6p29njfdR39As1sVaayeyQdTmO/B7gpFyU7oWIw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "KN4FJD2GJLMBVIJVAI3DQ2V7KNF5MMPC",
+                            TwoFactorEnabled = false,
+                            UserName = "user10"
+                        },
+                        new
+                        {
+                            Id = "ff92bb06-898e-4f2d-815f-50b00fb9793d",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d8775de6-d2ce-4954-b688-c044d5fb7847",
+                            Email = "user11@mail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER11@MAIL.COM",
+                            NormalizedUserName = "USER11",
+                            PasswordHash = "AQAAAAEAACcQAAAAEE0TKhUTEhl/cl+l4FLqd4j+pCxcXTaFLzA3NcEaqf8ehF32TrTPivjd8btLJOTFAg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "Y6QUHHD5OKKA5OWYUV3TKEMQBAYWUMJX",
+                            TwoFactorEnabled = false,
+                            UserName = "user11"
+                        });
                 });
 
             modelBuilder.Entity("webbshop2.Models.Product", b =>

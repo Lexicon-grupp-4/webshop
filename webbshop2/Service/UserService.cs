@@ -9,11 +9,13 @@ namespace webbshop2.Service
     public interface IUserService
     {
         Task<ApplicationUser> Create(RegisterDto user);
+        Task<ApplicationUser> GetUserByName(string name);
     }
 
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> userManager;
+        //private readonly RoleManager<IdentityRole> roleManager;
 
         public UserService(UserManager<ApplicationUser> userManager)
         {
@@ -22,12 +24,11 @@ namespace webbshop2.Service
 
         public async Task<ApplicationUser> Create(RegisterDto model)
         {
-            ApplicationUser userExists = await userManager.FindByNameAsync(model.Email);
+            ApplicationUser userExists = await userManager.FindByNameAsync(model.Name);
             if (userExists != null)
             {
                 throw new ServiceException(String.Format("user {0} already existing ", model.Name));
             }
-
             ApplicationUser user = new ApplicationUser()
             {
                 Email = model.Email,
@@ -38,6 +39,17 @@ namespace webbshop2.Service
             if (!result.Succeeded)
             {
                 throw new ServiceException("failed to create account");
+            }
+            await userManager.AddToRoleAsync(user, UserRoles.User);
+            return user;
+        }
+
+        public async Task<ApplicationUser> GetUserByName(String name)
+        {
+            var user = await userManager.FindByNameAsync(name);
+            if (user == null)
+            {
+                return null;
             }
             return user;
         }
