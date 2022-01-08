@@ -179,5 +179,4 @@ export const reducer: Reducer<AuthState> = (state: AuthState | undefined, incomi
 
 // SELECTORS
 
-export const selectIsLogedIn = (state: ApplicationState) => state.auth!.isLogedIn;
 export const selectUser = (state: ApplicationState) => state.auth!.user;
