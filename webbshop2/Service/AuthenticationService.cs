@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,10 +38,10 @@ namespace webbshop2.Service
         }
         public async Task<LoginResponseDto> Login(LoginDto creds)
         {
-            var user = await userManager.FindByNameAsync(creds.Email);
-            if (user == null)
+            var user = await userManager.FindByNameAsync(creds.Name);
+            if (user == null || await userManager.CheckPasswordAsync(user, creds.Password) == false)
             {
-                return null;
+                throw new InvalidCredentialException();
             }
 
             var userRoles = await userManager.GetRolesAsync(user);
@@ -51,10 +52,9 @@ namespace webbshop2.Service
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
-            foreach (var userRole in userRoles)
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-            }
+            // simplification: only one role per user. And every user must have a role.
+            var userRole = userRoles[0];
+            authClaims.Add(new Claim(ClaimTypes.Role, userRole));
 
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
 
@@ -70,7 +70,8 @@ namespace webbshop2.Service
             {
                 Id = user.Id,
                 Name = user.UserName,
-                Email = user.Email
+                Email = user.Email,
+                Role = userRole
             };
 
             LoginResponseDto loginResponse = new LoginResponseDto()
@@ -81,5 +82,7 @@ namespace webbshop2.Service
 
             return loginResponse;
         }
+        
+
     }
 }

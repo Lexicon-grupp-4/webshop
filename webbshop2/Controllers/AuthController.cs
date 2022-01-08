@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
+using webbshop2.Authentication;
 using webbshop2.Dtos;
 using webbshop2.Service;
 
@@ -39,10 +42,32 @@ namespace webbshop2.Controllers
                 var loginResponse = await authService.Login(dto);
                 return Ok(loginResponse);
             }
-            catch (ServiceException)
+            catch (Exception) // TODO move to filter
             {
                 return StatusCode(StatusCodes.Status401Unauthorized);
             }
+        }
+
+        [Authorize]
+        [HttpGet("user")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            ApplicationUser user;
+            try
+            {
+                user = await userService.GetUserByName(HttpContext.User.Identity.Name);
+            }
+            catch (ServiceException)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            UserInfo userInfo = new UserInfo()
+            {
+                Name = user.UserName ,
+                Id = user.Id,
+                Email = user.Email
+            };
+            return Ok(userInfo);
         }
     }
 }

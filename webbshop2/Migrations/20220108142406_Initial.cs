@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace webbshop2.Migrations
 {
-    public partial class initialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -172,6 +172,25 @@ namespace webbshop2.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "7a274fea-5a74-4b08-b713-996c2a4da200", "82261118-f4a2-410b-a505-0abc05c50f0b", "User", "USER" },
+                    { "cdcaa373-39c4-4c9d-ada2-af67cead244f", "cdcaa373-39c4-4c9d-ada2-af67cead244f", "Admin", "ADMIN" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "33734c07-3f1a-4b37-8330-5e947c2a9d57", 0, "697e2c0e-ec25-43e5-9bd1-ceecf0751f0b", "admin@mail.com", false, false, null, "ADMIN@MAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAENOinM9VCukuhFocb5q4uKg6YyqXUfPmTjNYp9s39yO/i3UbieyWLon9JXTeeZvfSw==", null, false, "JLWGJISJQWEYTH3BZGOBFQTWVPHLCGMJ", false, "admin" },
+                    { "577d7a59-0221-4bb7-be67-3bbaad46022c", 0, "7d1278d2-5d20-4751-ba32-f7583a77378b", "user10@mail.com", false, false, null, "USER10@MAIL.COM", "USER10", "AQAAAAEAACcQAAAAEGrOtfDoRSMoDzZIJQezM2L6RZT6p29njfdR39As1sVaayeyQdTmO/B7gpFyU7oWIw==", null, false, "KN4FJD2GJLMBVIJVAI3DQ2V7KNF5MMPC", false, "user10" },
+                    { "ff92bb06-898e-4f2d-815f-50b00fb9793d", 0, "d8775de6-d2ce-4954-b688-c044d5fb7847", "user11@mail.com", false, false, null, "USER11@MAIL.COM", "USER11", "AQAAAAEAACcQAAAAEE0TKhUTEhl/cl+l4FLqd4j+pCxcXTaFLzA3NcEaqf8ehF32TrTPivjd8btLJOTFAg==", null, false, "Y6QUHHD5OKKA5OWYUV3TKEMQBAYWUMJX", false, "user11" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "Brand", "Description", "Name", "PictureUrl", "Price", "Quantity", "Type" },
                 values: new object[,]
@@ -182,6 +201,21 @@ namespace webbshop2.Migrations
                     { 4, "brand", "description", "Skruvmejsel", "/images/products/p.png", 250f, 300, "type" },
                     { 5, "brand", "description", "Såg", "/images/products/p.png", 300f, 120, "type" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { "33734c07-3f1a-4b37-8330-5e947c2a9d57", "cdcaa373-39c4-4c9d-ada2-af67cead244f" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { "577d7a59-0221-4bb7-be67-3bbaad46022c", "7a274fea-5a74-4b08-b713-996c2a4da200" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { "ff92bb06-898e-4f2d-815f-50b00fb9793d", "7a274fea-5a74-4b08-b713-996c2a4da200" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
