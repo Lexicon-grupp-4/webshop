@@ -45,6 +45,10 @@ export const actionCreators = {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
         const jwt = sessionStorage.getItem('jwt');
+        if (!jwt) {
+            console.error('missing token')
+            return;
+        }
         const headers = {
           'Authorization': `Bearer ${jwt}`
         };
