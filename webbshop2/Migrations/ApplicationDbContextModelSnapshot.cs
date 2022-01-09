@@ -298,6 +298,18 @@ namespace webbshop2.Migrations
                         });
                 });
 
+            modelBuilder.Entity("webbshop2.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("webbshop2.Models.Product", b =>
                 {
                     b.Property<int>("Id")
