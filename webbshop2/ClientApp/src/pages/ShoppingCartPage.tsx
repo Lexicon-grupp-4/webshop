@@ -1,6 +1,13 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectOrderItems, OrderItem, REMOVE_PRODUCT, RemoveProductAction } from '../store/ShoppingCart';
+import { Button } from 'reactstrap';
+import { 
+    selectOrderItems, 
+    OrderItem, 
+    REMOVE_PRODUCT, 
+    RemoveProductAction,
+    actionCreators
+} from '../store/ShoppingCart';
 
 const makeList = (items: OrderItem[], handleClick: any, removeOrderItem: any) =>
     items.map((i) => {
@@ -23,15 +30,18 @@ export default function ShoppingCartPage() {
         dispatch({ type: REMOVE_PRODUCT, orderItem} as RemoveProductAction);
     }
     return (
-        <table className={'table'}>
-        <thead>
-            <tr>
-            <th scope="col">Namn</th>
-            <th scope="col">Pris</th>
-            <th scope="col">Antal</th>
-            </tr>
-        </thead>
-        <tbody>{products && makeList(products, selectOrderItem, removeOrderItem)}</tbody>
-        </table>
+        <>
+            <table className={'table'}>
+                <thead>
+                    <tr>
+                    <th scope="col">Namn</th>
+                    <th scope="col">Pris</th>
+                    <th scope="col">Antal</th>
+                    </tr>
+                </thead>
+                <tbody>{products && makeList(products, selectOrderItem, removeOrderItem)}</tbody>
+            </table>
+            <Button onClick={() => dispatch(actionCreators.postOrder())}>Skicka Order</Button>
+        </>
     );
 }

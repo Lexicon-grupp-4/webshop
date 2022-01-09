@@ -1,6 +1,8 @@
 import { Action, Reducer } from 'redux';
+import { AppThunkAction } from '.';
 import { ApplicationState } from './index';
 import { Product } from './Products';
+import { getToken } from '../tokenService';
 
 export interface ShoppingCartState {
     orderItems: OrderItem[];
@@ -13,21 +15,80 @@ export interface OrderItem extends Product {}
 
 export const ADD_PRODUCT = 'cart/ADD_PRODUCT';
 export const REMOVE_PRODUCT = 'cart/REMOVE_PRODUCT';
+export const SEND_ORDER = 'cart/SEND_ORDER';
+export const SEND_ORDER_SUCCESS = 'cart/SEND_ORDER_SUCCESS';
+export const SEND_ORDER_FAILURE = 'cart/SEND_ORDER_FAILURE';
 
 interface AddProductAction {
     type: 'cart/ADD_PRODUCT';
     orderItem: OrderItem;
 }
-
 export interface RemoveProductAction {
     type: 'cart/REMOVE_PRODUCT';
     orderItem: OrderItem;
 }
+interface SendOrderAction {
+    type: 'cart/SEND_ORDER';
+}
+interface SendOrderSuccessAction {
+    type: 'cart/SEND_ORDER_SUCCESS';
+}
+interface SendOrderFailureAction {
+    type: 'cart/SEND_ORDER_FAILURE';
+}
 
-type KnownAction = AddProductAction | RemoveProductAction;
+// Has to match backend
+export interface OrderItemDto {
+    id: number;
+    quantity: number;
+}
+export interface OrderDto {
+    id?: number;
+    items: OrderItemDto[];
+}
+
+
+type KnownAction = AddProductAction | RemoveProductAction | SendOrderAction 
+| SendOrderSuccessAction | SendOrderFailureAction;
+
+function MakeOrder(orderItems: OrderItem[]): OrderDto {
+    const items = orderItems.map(o => {
+        return { id: o.id, quantity: o.quantity}
+    });
+    return {
+        items
+    };
+}
 
 export const actionCreators = {
+    postOrder: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        const appState = getState();
+        const items = appState.cart!.orderItems;
+        const token = getToken();
+        const order = MakeOrder(items!);
+        console.log('mapping', items, 'to', order);
+        if (appState) {
+            fetch(`api/orders`, {
+                method: 'POST',
+                body: JSON.stringify(order),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    if(response.ok) {
+                        dispatch({ type: SEND_ORDER_SUCCESS })
+                        return response.json();
+                    } else {
+                        throw Error('bad response');
+                    }
+                })
+                .catch(() => dispatch({ type: SEND_ORDER_FAILURE }));
 
+            dispatch({ type: SEND_ORDER });
+        }
+    },
 }
 
 // REDUCER

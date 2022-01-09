@@ -10,7 +10,7 @@ using webbshop2.Data;
 namespace webbshop2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220109010735_initialCreate")]
+    [Migration("20220109233835_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -298,6 +298,18 @@ namespace webbshop2.Migrations
                             TwoFactorEnabled = false,
                             UserName = "user11"
                         });
+                });
+
+            modelBuilder.Entity("webbshop2.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("webbshop2.Models.Product", b =>
