@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import NavLoginTab from './NavLoginTab';
+import NavShoppingCart from './NavShoppingCart';
 import './NavMenu.css';
 
 export default function NavMenu() {
@@ -26,6 +27,7 @@ export default function NavMenu() {
                             <NavItem>
                                 <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
                             </NavItem>
+                            <NavShoppingCart/>
                             <NavLoginTab />
                         </ul>
                     </Collapse>
