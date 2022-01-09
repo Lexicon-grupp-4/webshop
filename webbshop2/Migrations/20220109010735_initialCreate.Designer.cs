@@ -10,8 +10,8 @@ using webbshop2.Data;
 namespace webbshop2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220108142406_Initial")]
-    partial class Initial
+    [Migration("20220109010735_initialCreate")]
+    partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
