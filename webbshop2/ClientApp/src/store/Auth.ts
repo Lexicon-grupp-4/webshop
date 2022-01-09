@@ -32,7 +32,7 @@ export const ATTEMPT_LOGIN = 'auth/ATTEMPT_LOGIN';
 export const REGISTER_ACCOUNT_SUCCESS = 'auth/REGISTER_ACCOUNT_SUCCESS';
 export const LOGOUT = 'auth/LOGOUT';
 
-interface PasswordLoginResponse {
+export interface PasswordLoginResponse {
   jwt: string,
   user: User
 }
@@ -79,33 +79,6 @@ type KnownAction = AttemptLoginAction | RegisterAccountAction | LoginSuccessActi
 // ACTION CREATORS
 
 export const actionCreators = {
-    attemptLogin: (name: string, password: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        // Only load data if it's something we don't already have (and are not already loading)
-        const appState = getState();
-        if (appState) {
-            fetch(`api/auth/login`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify({ name, password })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        // setRegistrationFailure(true);
-                        throw Error('registration failed');
-                    }
-                    return response.json() as Promise<PasswordLoginResponse>;
-                })
-                .then(data => {
-                    dispatch({ type: CREDENTIALS_LOGIN_SUCCESS, jwt: data.jwt, user: data.user });
-                    sessionStorage.setItem('jwt', data.jwt);
-                })
-                .catch(()=> {
-                    dispatch({ type: CREDENTIALS_LOGIN_FAILURE });
-                });
-
-            dispatch({ type: ATTEMPT_LOGIN });
-        }
-    },
     verifyAuthenticationToken: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
         const token = getToken();
