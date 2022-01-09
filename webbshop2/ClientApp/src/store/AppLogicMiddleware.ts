@@ -22,7 +22,6 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
         // After successfull login move to route /
         storeAPI.dispatch(push('/login'));
     }
-
     return n;
 }
 
