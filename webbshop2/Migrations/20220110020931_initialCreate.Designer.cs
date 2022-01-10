@@ -10,7 +10,7 @@ using webbshop2.Data;
 namespace webbshop2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220109233835_initialCreate")]
+    [Migration("20220110020931_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -312,15 +312,40 @@ namespace webbshop2.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("webbshop2.Models.Product", b =>
+            modelBuilder.Entity("webbshop2.Models.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Brand")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("webbshop2.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -338,9 +363,6 @@ namespace webbshop2.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Products");
@@ -348,58 +370,48 @@ namespace webbshop2.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Brand = "brand",
+                            Id = 2001,
                             Description = "description",
                             Name = "Hammare",
                             PictureUrl = "/images/products/p.png",
                             Price = 100f,
-                            Quantity = 20,
-                            Type = "type"
+                            Quantity = 20
                         },
                         new
                         {
-                            Id = 2,
-                            Brand = "brand",
+                            Id = 2002,
                             Description = "description",
                             Name = "Köttbulletång",
                             PictureUrl = "/images/products/p.png",
                             Price = 210f,
-                            Quantity = 6,
-                            Type = "type"
+                            Quantity = 6
                         },
                         new
                         {
-                            Id = 3,
-                            Brand = "brand",
+                            Id = 2003,
                             Description = "description",
                             Name = "Borrmaskin",
                             PictureUrl = "/images/products/p.png",
                             Price = 2000f,
-                            Quantity = 3,
-                            Type = "type"
+                            Quantity = 3
                         },
                         new
                         {
-                            Id = 4,
-                            Brand = "brand",
+                            Id = 2004,
                             Description = "description",
                             Name = "Skruvmejsel",
                             PictureUrl = "/images/products/p.png",
                             Price = 250f,
-                            Quantity = 300,
-                            Type = "type"
+                            Quantity = 300
                         },
                         new
                         {
-                            Id = 5,
-                            Brand = "brand",
+                            Id = 2005,
                             Description = "description",
                             Name = "Såg",
                             PictureUrl = "/images/products/p.png",
                             Price = 300f,
-                            Quantity = 120,
-                            Type = "type"
+                            Quantity = 120
                         });
                 });
 
@@ -450,6 +462,21 @@ namespace webbshop2.Migrations
                     b.HasOne("webbshop2.Authentication.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("webbshop2.Models.OrderItem", b =>
+                {
+                    b.HasOne("webbshop2.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("webbshop2.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
