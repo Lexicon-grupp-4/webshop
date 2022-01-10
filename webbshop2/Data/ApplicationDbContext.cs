@@ -26,6 +26,9 @@ namespace webbshop2.Data
                 .WithOne(e => e.Order)
                 .IsRequired();
 
+            modelBuilder.Entity<Order>()
+                .HasOne(c => c.Customer);
+
             modelBuilder.Entity<OrderItem>()
                 .HasOne(c => c.Order)
                 .WithMany(o => o.OrderItems);

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using webbshop2.Authentication;
 
 namespace webbshop2.Models
 {
@@ -13,10 +12,11 @@ namespace webbshop2.Models
         [Key]
         public int Id { get; set; }
 
-        public DateTime date;
+        public DateTime Date { get; set; }
 
-        // TODO connect to a user somehow
-        public int customerId;
+        // should a customer be an ApplicationUser?
+        [Required]
+        public ApplicationUser Customer { get; set; }
 
         public List<OrderItem> OrderItems
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Linq;
 using webbshop2.Authentication;
 using webbshop2.Models;
@@ -78,8 +79,8 @@ namespace webbshop2.Data
             _context.UserRoles.Add(user2Role);
             _context.SaveChanges();
 
-            Order oder1 = new Order {};
-            Order oder2 = new Order {};
+            Order oder1 = new Order { Customer = user1, Date = DateTime.Now };
+            Order oder2 = new Order { Customer = user1, Date = DateTime.Now };
 
             _context.Orders.Add(oder1);
             _context.Orders.Add(oder2);

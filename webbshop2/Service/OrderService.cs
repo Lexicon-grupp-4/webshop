@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using webbshop2.Authentication;
 using webbshop2.Data;
 using webbshop2.Dtos;
 using webbshop2.Models;
@@ -10,7 +11,7 @@ namespace webbshop2.Service
 {
     public interface IOrderService
     {
-        Task<OrderDto> Create(OrderDto order);
+        Task<OrderDto> Create(OrderDto order, IIdentity user);
         Task<List<OrderDto>> GetOrdersByUser(OrderDto order);
     }
 
@@ -18,32 +19,27 @@ namespace webbshop2.Service
     {
         readonly ApplicationDbContext _context;
         readonly IProductsService productsService;
+        readonly IUserService userService;
 
-        public OrderService(ApplicationDbContext context, IProductsService productsService)
+        public OrderService(ApplicationDbContext context, 
+            IProductsService productsService,
+            IUserService userService)
         {
             _context = context;
             this.productsService = productsService;
+            this.userService = userService;
         }
-
-        //private async Task<OrderItem> StoreOrderItem(OrderItem orderItem)
-        //{
-        //    var item = new OrderItem()
-        //    {
-        //        Price = orderItem.Price,
-        //        Quantity = orderItem.Quantity
-        //    };
-        //    _context.OrderItems.Add(item);
-        //    await _context.SaveChangesAsync();
-        //    return item;
-        //}
 
 
         /**
          *  Will strore an order in db
          */
-        public async Task<Order> Store(OrderDto orderDto)
+        public async Task<Order> Store(OrderDto orderDto, ApplicationUser user)
         {
-            Order order = new Order();
+            Order order = new Order() { 
+                Customer = user, // should a customer be an ApplicationUser?
+                Date = DateTime.Now
+            }; 
             foreach (OrderItemsDto itemTdo in orderDto.Items)
             {
                 Product product = await productsService.GetProduct(itemTdo.Id);
@@ -67,17 +63,11 @@ namespace webbshop2.Service
          * 3: store order (store order and orderitems)
          * 4: update inventory
          **/
-        public async Task<OrderDto> Create(OrderDto orderDto)
+        public async Task<OrderDto> Create(OrderDto orderDto, IIdentity identity)
         {
-            //Order o = new Order()
-            //{
-            //    customerId = 100,
-            //    date = DateTime.Now // maybe let db do this
-            //};
-            //var result = await _context.Orders.AddAsync(o);
-            //await _context.SaveChangesAsync();
-            //order.Id = result.Entity.Id;
-            var order = await Store(orderDto);
+            // TODO maybe identity dont have to come from controller?
+            ApplicationUser user = await userService.GetUserByName(identity.Name);
+            var order = await Store(orderDto, user);
             return orderDto;
         }
 
