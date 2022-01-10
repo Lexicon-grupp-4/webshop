@@ -3,7 +3,6 @@ using webbshop2.Authentication;
 using webbshop2.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
 
 namespace webbshop2.Data
 {

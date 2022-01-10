@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace webbshop2.Dtos
 {
-    public class OrderItemsDto
+    public class OrderItemDto
     {
         public int Id { get; set; }
         public int Quantity { get; set; }
+        public int ProductId { get; set; }
+        public float Price { get; set; }
     }
 
     public class OrderDto
     {
-        private List<OrderItemsDto> items;
-
+        private List<OrderItemDto> items = new List<OrderItemDto>();
         public int Id { get; set; }
-
-        public List<OrderItemsDto> Items
+        public List<OrderItemDto> Items
         {
             get { return items; }
             set { items = value; }

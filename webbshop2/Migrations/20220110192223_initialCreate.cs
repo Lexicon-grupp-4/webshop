@@ -176,6 +176,7 @@ namespace webbshop2.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
                     CustomerId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
