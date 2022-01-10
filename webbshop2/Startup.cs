@@ -77,13 +77,15 @@ namespace webbshop2
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddTransient<DbSeedData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbSeedData seeder)
         {
             if (env.IsDevelopment())
             {
+                seeder.Seed();
                 app.UseDeveloperExceptionPage();
             }
             else
