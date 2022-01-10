@@ -68,8 +68,6 @@ namespace webbshop2.Migrations
                     Description = table.Column<string>(nullable: true),
                     Price = table.Column<float>(nullable: false),
                     PictureUrl = table.Column<string>(nullable: true),
-                    Type = table.Column<string>(nullable: true),
-                    Brand = table.Column<string>(nullable: true),
                     Quantity = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -183,6 +181,34 @@ namespace webbshop2.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Price = table.Column<float>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    ProductId = table.Column<int>(nullable: false),
+                    OrderId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -204,14 +230,14 @@ namespace webbshop2.Migrations
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "Id", "Brand", "Description", "Name", "PictureUrl", "Price", "Quantity", "Type" },
+                columns: new[] { "Id", "Description", "Name", "PictureUrl", "Price", "Quantity" },
                 values: new object[,]
                 {
-                    { 1, "brand", "description", "Hammare", "/images/products/p.png", 100f, 20, "type" },
-                    { 2, "brand", "description", "Köttbulletång", "/images/products/p.png", 210f, 6, "type" },
-                    { 3, "brand", "description", "Borrmaskin", "/images/products/p.png", 2000f, 3, "type" },
-                    { 4, "brand", "description", "Skruvmejsel", "/images/products/p.png", 250f, 300, "type" },
-                    { 5, "brand", "description", "Såg", "/images/products/p.png", 300f, 120, "type" }
+                    { 2001, "description", "Hammare", "/images/products/p.png", 100f, 20 },
+                    { 2002, "description", "Köttbulletång", "/images/products/p.png", 210f, 6 },
+                    { 2003, "description", "Borrmaskin", "/images/products/p.png", 2000f, 3 },
+                    { 2004, "description", "Skruvmejsel", "/images/products/p.png", 250f, 300 },
+                    { 2005, "description", "Såg", "/images/products/p.png", 300f, 120 }
                 });
 
             migrationBuilder.InsertData(
@@ -267,6 +293,16 @@ namespace webbshop2.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_ProductId",
+                table: "OrderItems",
+                column: "ProductId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -287,16 +323,19 @@ namespace webbshop2.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "Products");
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Products");
         }
     }
 }
