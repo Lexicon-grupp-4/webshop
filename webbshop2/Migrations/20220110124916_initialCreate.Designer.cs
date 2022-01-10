@@ -10,7 +10,7 @@ using webbshop2.Data;
 namespace webbshop2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220110020931_initialCreate")]
+    [Migration("20220110124916_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -153,16 +153,6 @@ namespace webbshop2.Migrations
                         {
                             UserId = "33734c07-3f1a-4b37-8330-5e947c2a9d57",
                             RoleId = "cdcaa373-39c4-4c9d-ada2-af67cead244f"
-                        },
-                        new
-                        {
-                            UserId = "577d7a59-0221-4bb7-be67-3bbaad46022c",
-                            RoleId = "7a274fea-5a74-4b08-b713-996c2a4da200"
-                        },
-                        new
-                        {
-                            UserId = "ff92bb06-898e-4f2d-815f-50b00fb9793d",
-                            RoleId = "7a274fea-5a74-4b08-b713-996c2a4da200"
                         });
                 });
 
@@ -265,38 +255,6 @@ namespace webbshop2.Migrations
                             SecurityStamp = "JLWGJISJQWEYTH3BZGOBFQTWVPHLCGMJ",
                             TwoFactorEnabled = false,
                             UserName = "admin"
-                        },
-                        new
-                        {
-                            Id = "577d7a59-0221-4bb7-be67-3bbaad46022c",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7d1278d2-5d20-4751-ba32-f7583a77378b",
-                            Email = "user10@mail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "USER10@MAIL.COM",
-                            NormalizedUserName = "USER10",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGrOtfDoRSMoDzZIJQezM2L6RZT6p29njfdR39As1sVaayeyQdTmO/B7gpFyU7oWIw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "KN4FJD2GJLMBVIJVAI3DQ2V7KNF5MMPC",
-                            TwoFactorEnabled = false,
-                            UserName = "user10"
-                        },
-                        new
-                        {
-                            Id = "ff92bb06-898e-4f2d-815f-50b00fb9793d",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "d8775de6-d2ce-4954-b688-c044d5fb7847",
-                            Email = "user11@mail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "USER11@MAIL.COM",
-                            NormalizedUserName = "USER11",
-                            PasswordHash = "AQAAAAEAACcQAAAAEE0TKhUTEhl/cl+l4FLqd4j+pCxcXTaFLzA3NcEaqf8ehF32TrTPivjd8btLJOTFAg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "Y6QUHHD5OKKA5OWYUV3TKEMQBAYWUMJX",
-                            TwoFactorEnabled = false,
-                            UserName = "user11"
                         });
                 });
 
@@ -366,53 +324,6 @@ namespace webbshop2.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 2001,
-                            Description = "description",
-                            Name = "Hammare",
-                            PictureUrl = "/images/products/p.png",
-                            Price = 100f,
-                            Quantity = 20
-                        },
-                        new
-                        {
-                            Id = 2002,
-                            Description = "description",
-                            Name = "Köttbulletång",
-                            PictureUrl = "/images/products/p.png",
-                            Price = 210f,
-                            Quantity = 6
-                        },
-                        new
-                        {
-                            Id = 2003,
-                            Description = "description",
-                            Name = "Borrmaskin",
-                            PictureUrl = "/images/products/p.png",
-                            Price = 2000f,
-                            Quantity = 3
-                        },
-                        new
-                        {
-                            Id = 2004,
-                            Description = "description",
-                            Name = "Skruvmejsel",
-                            PictureUrl = "/images/products/p.png",
-                            Price = 250f,
-                            Quantity = 300
-                        },
-                        new
-                        {
-                            Id = 2005,
-                            Description = "description",
-                            Name = "Såg",
-                            PictureUrl = "/images/products/p.png",
-                            Price = 300f,
-                            Quantity = 120
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
