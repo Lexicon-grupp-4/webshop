@@ -8,7 +8,7 @@ namespace webbshop2.Models
 {
     public class Order
     {
-        private List<OrderItem> orderItems;
+        private List<OrderItem> orderItems = new List<OrderItem>();
 
         [Key]
         public int Id { get; set; }
@@ -23,7 +23,5 @@ namespace webbshop2.Models
             get { return orderItems; }
             set { orderItems = value; }
         }
-
-        //public List<OrderItem> OrderItems { get; set; }
     }
 }
