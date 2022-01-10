@@ -79,8 +79,8 @@ namespace webbshop2.Data
             _context.UserRoles.Add(user2Role);
             _context.SaveChanges();
 
-            Order oder1 = new Order { Customer = user1, Date = DateTime.Now };
-            Order oder2 = new Order { Customer = user1, Date = DateTime.Now };
+            Order oder1 = new Order { Customer = user1, Date = DateTime.Now, Status = OrderStatus.Processing };
+            Order oder2 = new Order { Customer = user1, Date = DateTime.Now, Status = OrderStatus.Problem };
 
             _context.Orders.Add(oder1);
             _context.Orders.Add(oder2);

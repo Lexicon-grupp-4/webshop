@@ -10,7 +10,7 @@ using webbshop2.Data;
 namespace webbshop2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220110161421_initialCreate")]
+    [Migration("20220110192223_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -271,6 +271,9 @@ namespace webbshop2.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

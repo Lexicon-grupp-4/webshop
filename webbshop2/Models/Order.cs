@@ -5,6 +5,14 @@ using webbshop2.Authentication;
 
 namespace webbshop2.Models
 {
+    public enum OrderStatus
+    {
+        Processing,
+        InTransit,
+        Cancelled,
+        Delivered,
+        Problem
+    }
     public class Order
     {
         private List<OrderItem> orderItems = new List<OrderItem>();
@@ -13,6 +21,8 @@ namespace webbshop2.Models
         public int Id { get; set; }
 
         public DateTime Date { get; set; }
+
+        public OrderStatus Status { get; set; }
 
         // should a customer be an ApplicationUser?
         [Required]

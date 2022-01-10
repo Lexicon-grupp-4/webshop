@@ -25,8 +25,8 @@ namespace webbshop2.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(OrderDto order)
         {
-            await orderService.Create(order, User.Identity);
-            return Ok();
+            order = await orderService.Create(order, User.Identity);
+            return Ok(order);
         }
     }
 }
