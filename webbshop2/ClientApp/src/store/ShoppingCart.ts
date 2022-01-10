@@ -66,7 +66,6 @@ export const actionCreators = {
         const items = appState.cart!.orderItems;
         const token = getToken();
         const order = MakeOrder(items!);
-        console.log('mapping', items, 'to', order);
         if (appState) {
             fetch(`api/orders`, {
                 method: 'POST',
@@ -121,6 +120,11 @@ export const reducer: Reducer<ShoppingCartState> = (state: ShoppingCartState | u
                 orderItems
             };
         }
+        case SEND_ORDER_SUCCESS:
+            return {
+            ...state,
+            orderItems: []
+        };
     }
 
     return state;

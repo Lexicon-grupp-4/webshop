@@ -22,7 +22,7 @@ const makeList = (items: OrderItem[], handleClick: any, removeOrderItem: any) =>
     });
 
 export default function ShoppingCartPage() {
-    const products = useSelector(selectOrderItems);
+    const items = useSelector(selectOrderItems);
     const dispatch = useDispatch();
     function selectOrderItem(id: number) {
     }
@@ -39,9 +39,9 @@ export default function ShoppingCartPage() {
                     <th scope="col">Antal</th>
                     </tr>
                 </thead>
-                <tbody>{products && makeList(products, selectOrderItem, removeOrderItem)}</tbody>
+                <tbody>{items && makeList(items, selectOrderItem, removeOrderItem)}</tbody>
             </table>
-            <Button onClick={() => dispatch(actionCreators.postOrder())}>Skicka Order</Button>
+            <Button disabled={items.length === 0} onClick={() => dispatch(actionCreators.postOrder())}>Skicka Order</Button>
         </>
     );
 }
