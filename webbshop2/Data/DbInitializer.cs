@@ -19,8 +19,8 @@ namespace webbshop2.Data
                 return false;   // DB has been seeded
             }
 
-            string user10Id = "577d7a59-0221-4bb7-be67-3bbaad46022c";
-            string user11Id = "ff92bb06-898e-4f2d-815f-50b00fb9793d";
+            //string user10Id = "577d7a59-0221-4bb7-be67-3bbaad46022c";
+            //string user11Id = "ff92bb06-898e-4f2d-815f-50b00fb9793d";
 
             //var user1 = new ApplicationUser
             //{
