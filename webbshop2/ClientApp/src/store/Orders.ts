@@ -3,12 +3,18 @@ import { AppThunkAction } from '.';
 import { OrderDto } from './DomainClasses';
 import { getToken } from '../tokenService';
 import { ApplicationState } from './index';
+import { transformOrders } from '../helper_functions/transform_functions';
+import { APP_CLEAR_PERSONAL_DATA, ClearPeronalDataAction } from './AppLogicMiddleware';
 
 // STATE
 
 export interface HistoricOrdersState {
     isLoading: boolean;
-    orders: OrderDto[];
+    orders: Order[];
+}
+
+export interface Order extends OrderDto {
+    localTime: string;
 }
 
 // ACTIONS
@@ -22,10 +28,10 @@ interface RequestOrdersAction {
 
 interface ReceiveOrdersAction {
     type: 'orders/RECEIVE_ORDERS';
-    orders: OrderDto[];
+    orders: Order[];
 }
 
-type KnownAction = RequestOrdersAction | ReceiveOrdersAction;
+type KnownAction = RequestOrdersAction | ReceiveOrdersAction | ClearPeronalDataAction;
 
 export const actionCreators = {
     requestOrders: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
@@ -39,8 +45,9 @@ export const actionCreators = {
                 }
             })
                 .then(response => response.json() as Promise<OrderDto[]>)
-                .then(data => {
-                    dispatch({ type: RECEIVE_ORDERS, orders: data });
+                .then((data: OrderDto[]) => {
+                    transformOrders(data as Order[]);
+                    dispatch({ type: RECEIVE_ORDERS, orders: data as Order[]});
                 });
             dispatch({ type: REQUEST_ORDERS });
         }
@@ -67,6 +74,8 @@ export const reducer: Reducer<HistoricOrdersState> = (state: HistoricOrdersState
                 orders: action.orders,
                 isLoading: false
             };
+        case APP_CLEAR_PERSONAL_DATA:
+            return {...unloadedState}
     }
     return state;
 };

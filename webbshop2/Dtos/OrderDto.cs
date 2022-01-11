@@ -15,7 +15,7 @@ namespace webbshop2.Dtos
     {
         private List<OrderItemDto> items = new List<OrderItemDto>();
         public int Id { get; set; }
-
+        public string Status { get; set; }
         public DateTime Date { get; set; } // check time format
         public List<OrderItemDto> Items
         {
