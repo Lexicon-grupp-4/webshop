@@ -28,7 +28,7 @@ interface ReceiveOrdersAction {
 type KnownAction = RequestOrdersAction | ReceiveOrdersAction;
 
 export const actionCreators = {
-    postOrder: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestOrders: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
         const token = getToken();
         if (appState) {
@@ -44,7 +44,7 @@ export const actionCreators = {
                 });
             dispatch({ type: REQUEST_ORDERS });
         }
-    },
+    }
 }
 
 // REDUCER 

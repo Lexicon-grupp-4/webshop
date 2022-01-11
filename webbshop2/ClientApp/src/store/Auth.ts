@@ -32,6 +32,7 @@ export const CREDENTIALS_LOGIN_FAILURE = 'auth/CREDENTIALS_LOGIN_FAILURE';
 export const ATTEMPT_LOGIN = 'auth/ATTEMPT_LOGIN';
 export const REGISTER_ACCOUNT_SUCCESS = 'auth/REGISTER_ACCOUNT_SUCCESS';
 export const LOGOUT = 'auth/LOGOUT';
+export const AUTHENTICATION_DONE = 'auth/AUTHENTICATION_DONE';
 
 export interface PasswordLoginResponse {
   jwt: string,
@@ -73,6 +74,10 @@ interface TokenVerificationAction {
     type: 'auth/ATTEMPT_TOKEN_VERIFICATION';
 }
 
+interface AuthenticationDoneAction {
+    type: 'auth/AUTHENTICATION_DONE';
+}
+
 type KnownAction = AttemptLoginAction | RegisterAccountAction | LoginSuccessAction
 | TokenVerificationAction | TokenVerifactionDoneAction | TokenVerifactionFailureAction
 | LogoutAction | CredentialsLoginFailureAction;
@@ -108,7 +113,8 @@ export const actionCreators = {
     logout: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         removeToken();
         dispatch({ type: LOGOUT });
-    }
+    },
+    authenticationDone: { type: AUTHENTICATION_DONE } as AuthenticationDoneAction
 };
 
 // REDUCER 
@@ -130,7 +136,6 @@ export const reducer: Reducer<AuthState> = (state: AuthState | undefined, incomi
                 isLogegdIn: true,
             };
         case TOKEN_VERIFICATION_SUCCESS:
-            console.log('successfully logged in with token');
             return {
                 ...state,
                 user: action.user,

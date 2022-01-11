@@ -28,7 +28,7 @@ export default function ShoppingCartPage() {
                 <thead>
                     <tr>
                     <th scope="col">Id</th>
-                    <th scope="col">Datumn</th>
+                    <th scope="col">Datum</th>
                     <th scope="col">Status</th>
                     </tr>
                 </thead>

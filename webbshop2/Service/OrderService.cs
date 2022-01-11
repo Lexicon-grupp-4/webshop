@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using webbshop2.Authentication;
@@ -11,23 +13,23 @@ namespace webbshop2.Service
 {
     public interface IOrderService
     {
-        Task<OrderDto> Create(OrderDto order, IIdentity user);
-        Task<List<OrderDto>> GetOrdersByUser(OrderDto order, IIdentity user);
+        Task<OrderDto> Create(OrderDto order);
+        Task<List<OrderDto>> GetOrdersByUser(); // maybe add status filter
     }
 
     public class OrderService : IOrderService
     {
         readonly ApplicationDbContext _context;
         readonly IProductsService productsService;
-        readonly IUserService userService;
+        readonly IAuthenticationService authService;
 
         public OrderService(ApplicationDbContext context, 
             IProductsService productsService,
-            IUserService userService)
+            IAuthenticationService authService)
         {
             _context = context;
             this.productsService = productsService;
-            this.userService = userService;
+            this.authService = authService;
         }
 
         /**
@@ -83,24 +85,30 @@ namespace webbshop2.Service
          * 3: store order (store order and orderitems)
          * 4: update inventory
          **/
-        public async Task<OrderDto> Create(OrderDto orderDto, IIdentity customerIdentity)
+        public async Task<OrderDto> Create(OrderDto orderDto)
         {
             // TODO make sure orders are validated
-
-            // NOTE maybe identity dont have to come from controller?
-            ApplicationUser customer = await userService.GetUserByName(customerIdentity.Name);
+            ApplicationUser customer = await authService.GetUser();
             Order order = await Store(orderDto, customer);
             return MakeOrderDto(order);
         }
 
-        public async Task<List<OrderDto>> GetOrdersByUser(OrderDto order, IIdentity customerIdentity)
-        {   
-            // NOTE maybe identity dont have to come from controller?
-            ApplicationUser customer = await userService.GetUserByName(customerIdentity.Name);
+        public async Task<List<OrderDto>> GetOrdersByUser()
+        {
+            ApplicationUser customer = await authService.GetUser();
 
-            List<OrderDto> orders = new List<OrderDto>();
+            var selectedOrders = await _context.Orders
+                .Where(p => p.Customer.Id == customer.Id)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .ToListAsync();
 
-            return orders;
+            List<OrderDto> ordersDto = new List<OrderDto>();
+            foreach(var order in selectedOrders)
+            {
+                ordersDto.Add(MakeOrderDto(order));
+            }
+            return ordersDto;
         }
     }
 }
