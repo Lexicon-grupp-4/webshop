@@ -1,15 +1,12 @@
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from '.';
 import { ApplicationState } from './index';
-import { Product } from './Products';
 import { getToken } from '../tokenService';
+import { OrderDto, CartItem } from './DomainClasses';
 
 export interface ShoppingCartState {
-    orderItems: OrderItem[];
+    orderItems: CartItem[];
 }
-
-// maybe it's just identical to product
-export interface OrderItem extends Product {}
 
 // ACTIONS 
 
@@ -21,11 +18,11 @@ export const SEND_ORDER_FAILURE = 'cart/SEND_ORDER_FAILURE';
 
 interface AddProductAction {
     type: 'cart/ADD_PRODUCT';
-    orderItem: OrderItem;
+    orderItem: CartItem;
 }
 export interface RemoveProductAction {
     type: 'cart/REMOVE_PRODUCT';
-    orderItem: OrderItem;
+    orderItem: CartItem;
 }
 interface SendOrderAction {
     type: 'cart/SEND_ORDER';
@@ -37,27 +34,12 @@ interface SendOrderFailureAction {
     type: 'cart/SEND_ORDER_FAILURE';
 }
 
-// Has to match backend
-export interface OrderItemDto {
-    id: number;
-    quantity: number;
-    productId?: number;
-    price?: number;
-}
-export interface OrderDto {
-    id?: number;
-    items: OrderItemDto[];
-    date?: string; // string for now
-    status?: string; // string for now, maybe enum
-}
-
-
 type KnownAction = AddProductAction | RemoveProductAction | SendOrderAction 
 | SendOrderSuccessAction | SendOrderFailureAction;
 
-function MakeOrder(orderItems: OrderItem[]): OrderDto {
+function MakeOrder(orderItems: CartItem[]): OrderDto {
     const items = orderItems.map(o => {
-        return { id: o.id, quantity: o.quantity}
+        return { id: o.id, quantity: o.quantity, i:o.id}
     });
     return {
         items
@@ -106,7 +88,7 @@ export const reducer: Reducer<ShoppingCartState> = (state: ShoppingCartState | u
     const action = incomingAction as KnownAction;
     switch (action.type) {
         case ADD_PRODUCT: {
-            const orderItems = [...state.orderItems] as OrderItem[];
+            const orderItems = [...state.orderItems] as CartItem[];
             const found = orderItems.find(i => i.id === action.orderItem.id);
             if (found) found.quantity += action.orderItem.quantity;
             else orderItems.push(action.orderItem);
@@ -116,7 +98,7 @@ export const reducer: Reducer<ShoppingCartState> = (state: ShoppingCartState | u
             };
         }
         case REMOVE_PRODUCT: {
-            const items = [...state.orderItems] as OrderItem[];
+            const items = [...state.orderItems] as CartItem[];
             // TODO Maybe decrease quantity and remove only if quantity = 0
             const orderItems = items.filter(i => i.id !== action.orderItem.id);
             return {

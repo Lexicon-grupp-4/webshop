@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from 'reactstrap';
+import { CartItem } from '../store/DomainClasses';
 import { 
-    selectOrderItems, 
-    OrderItem, 
+    selectOrderItems,
     REMOVE_PRODUCT, 
     RemoveProductAction,
     actionCreators
 } from '../store/ShoppingCart';
 
-const makeList = (items: OrderItem[], handleClick: any, removeOrderItem: any) =>
+const makeList = (items: CartItem[], handleClick: any, removeOrderItem: any) =>
     items.map((i) => {
         return (
         <tr key={i.id} onClick={() => handleClick(i.id)}>
@@ -26,7 +26,7 @@ export default function ShoppingCartPage() {
     const dispatch = useDispatch();
     function selectOrderItem(id: number) {
     }
-    function removeOrderItem(orderItem: OrderItem) {
+    function removeOrderItem(orderItem: CartItem) {
         dispatch({ type: REMOVE_PRODUCT, orderItem} as RemoveProductAction);
     }
     return (

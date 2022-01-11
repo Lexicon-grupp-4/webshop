@@ -1,12 +1,14 @@
 import * as Products from './Products';
 import * as Auth from './Auth';
 import * as ShoppingCart from './ShoppingCart';
+import * as Orders from './Orders';
 
 // The top-level state object
 export interface ApplicationState {
     products: Products.ProductsState | undefined;
     auth: Auth.AuthState | undefined;
     cart: ShoppingCart.ShoppingCartState | undefined;
+    orders: Orders.HistoricOrdersState | undefined;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -16,6 +18,7 @@ export const reducers = {
     products: Products.reducer,
     auth: Auth.reducer,
     cart: ShoppingCart.reducer,
+    orders: Orders.reducer,
 };
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are
