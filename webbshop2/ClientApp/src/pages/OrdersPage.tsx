@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 // import { Button } from 'reactstrap';
-import { OrderDto } from '../store/DomainClasses';
+import { Order } from '../store/Orders';
 import { 
     selectOrders
 } from '../store/Orders';
 
-const makeList = (items: OrderDto[], handleClick: any) =>
+const makeList = (items: Order[], handleClick: any) =>
     items.map((i) => {
         return (
         <tr key={i.id} onClick={() => handleClick(i.id)}>
             <td>{i.id}</td>
-            <td>{i.date}</td>
+            <td>{i.localTime}</td>
             <td>{i.status}</td>
         </tr>
         );

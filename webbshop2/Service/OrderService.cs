@@ -62,7 +62,9 @@ namespace webbshop2.Service
         {
             OrderDto orderDto = new OrderDto()
             {
-                Id = order.Id
+                Id = order.Id,
+                Date = order.Date,
+                Status = order.Status.ToString()
             };
             foreach (OrderItem item in order.OrderItems)
             {
