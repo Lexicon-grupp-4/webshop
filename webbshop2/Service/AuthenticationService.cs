@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -16,6 +17,7 @@ namespace webbshop2.Service
     public interface IAuthenticationService
     {
         Task<LoginResponseDto> Login(LoginDto creds);
+        Task<ApplicationUser> GetUser();
     }
 
     public class LoginResponse
@@ -28,12 +30,14 @@ namespace webbshop2.Service
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         public AuthenticationService(UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+            RoleManager<IdentityRole> roleManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
         }
         public async Task<LoginResponseDto> Login(LoginDto creds)
@@ -82,7 +86,16 @@ namespace webbshop2.Service
 
             return loginResponse;
         }
-        
 
+        public async Task<ApplicationUser> GetUser()
+        {
+            string userName = httpContextAccessor.HttpContext.User.Identity.Name;
+            var user = await userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                return null;
+            }
+            return user;
+        }
     }
 }

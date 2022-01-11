@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace webbshop2.Dtos
 {
@@ -14,6 +15,8 @@ namespace webbshop2.Dtos
     {
         private List<OrderItemDto> items = new List<OrderItemDto>();
         public int Id { get; set; }
+
+        public DateTime Date { get; set; } // check time format
         public List<OrderItemDto> Items
         {
             get { return items; }

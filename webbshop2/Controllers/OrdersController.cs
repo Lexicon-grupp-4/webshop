@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using webbshop2.Dtos;
 using webbshop2.Service;
@@ -25,8 +21,15 @@ namespace webbshop2.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(OrderDto order)
         {
-            order = await orderService.Create(order, User.Identity);
+            order = await orderService.Create(order);
             return Ok(order);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var ordersDto = await orderService.GetOrdersByUser();
+            return Ok(ordersDto);
         }
     }
 }
