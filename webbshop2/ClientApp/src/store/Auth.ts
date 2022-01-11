@@ -8,7 +8,7 @@ import { getToken, removeToken } from '../tokenService';
 
 export interface AuthState {
     user: User | undefined;
-    isLogegdIn: boolean; // maybe redundant
+    isLoggedIn: boolean; // maybe redundant
     jwt: string | undefined;
 }
 
@@ -119,7 +119,7 @@ export const actionCreators = {
 
 // REDUCER 
 
-const unloadedState: AuthState = { user: undefined, isLogegdIn: false, jwt: undefined };
+const unloadedState: AuthState = { user: undefined, isLoggedIn: false, jwt: undefined };
 
 export const reducer: Reducer<AuthState> = (state: AuthState | undefined, incomingAction: Action): AuthState => {
     if (state === undefined) {
@@ -133,24 +133,24 @@ export const reducer: Reducer<AuthState> = (state: AuthState | undefined, incomi
                 ...state,
                 jwt: action.jwt,
                 user: action.user,
-                isLogegdIn: true,
+                isLoggedIn: true,
             };
         case TOKEN_VERIFICATION_SUCCESS:
             return {
                 ...state,
                 user: action.user,
-                isLogegdIn: true,
+                isLoggedIn: true,
             };
         case TOKEN_VERIFICATION_FAILURE:
             return {
                 ...state,
-                isLogegdIn: true,
+                isLoggedIn: false,
             };
         case LOGOUT:
             return {
                 ...state,
                 user: undefined,
-                isLogegdIn: false,
+                isLoggedIn: false,
             };
     }
 
@@ -160,4 +160,4 @@ export const reducer: Reducer<AuthState> = (state: AuthState | undefined, incomi
 // SELECTORS
 
 export const selectUser = (state: ApplicationState) => state.auth!.user;
-export const selectIsLoggedIn = (state: ApplicationState) => state.auth!.isLogegdIn;
+export const selectIsLoggedIn = (state: ApplicationState) => state.auth!.isLoggedIn;
