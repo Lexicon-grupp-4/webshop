@@ -1,11 +1,11 @@
-export function getToken(): string {
-    return sessionStorage.getItem('jwt')!;
+export function getToken(): string | null {
+    return localStorage.getItem('jwt');
 }
 
 export function setToken(token: string) {
-    sessionStorage.setItem('jwt', token);
+    localStorage.setItem('jwt', token);
 }
 
 export function removeToken() {
-    sessionStorage.removeItem('jwt');
+    localStorage.removeItem('jwt');
 }

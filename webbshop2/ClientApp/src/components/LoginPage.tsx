@@ -9,6 +9,7 @@ import {
 } from '../store/Auth';
 import './LoginPage.css';
 import { Link } from "react-router-dom";
+import { setToken, removeToken } from '../tokenService';
 
 export default function LoginPage() {
     // TODO Add form validation and disable submit button accordingly
@@ -34,10 +35,12 @@ export default function LoginPage() {
             })
             .then(data => {
                 dispatch({ type: CREDENTIALS_LOGIN_SUCCESS, jwt: data.jwt, user: data.user });
-                sessionStorage.setItem('jwt', data.jwt);
+                setToken(data.jwt);
             })
             .catch(()=> {
                 dispatch({ type: CREDENTIALS_LOGIN_FAILURE });
+                console.error('removing bad auth-token');
+                removeToken();
             });
         dispatch({ type: ATTEMPT_LOGIN });
     }

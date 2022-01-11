@@ -1,6 +1,7 @@
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from '.';
 import { ApplicationState } from './index';
+import { ProductDto } from './DomainClasses';
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
@@ -10,12 +11,7 @@ export interface ProductsState {
     products: Product[];
 }
 
-export interface Product {
-    id: number;
-    name: number;
-    price: number;
-    quantity:number;
-}
+export interface Product extends ProductDto {}
 
 // -----------------
 // ACTIONS - These are serializable (hence replayable) descriptions of state transitions.

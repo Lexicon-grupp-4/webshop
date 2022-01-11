@@ -5,6 +5,7 @@ import Home from './components/Home';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import ShoppingCartPage from './pages/ShoppingCartPage';
+import OrdersPage from './pages/OrdersPage';
 
 import './custom.css'
 
@@ -14,5 +15,6 @@ export default () => (
         <Route path='/login' component={LoginPage} />
         <Route path='/register' component={RegisterPage} />
         <Route path='/cart' component={ShoppingCartPage} />
+        <Route path='/orders' component={OrdersPage} />
     </Layout>
 );
