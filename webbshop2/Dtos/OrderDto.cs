@@ -9,6 +9,9 @@ namespace webbshop2.Dtos
         public int Quantity { get; set; }
         public int ProductId { get; set; }
         public float Price { get; set; }
+
+        // Adding some properties that belongs to a Product
+        public string Name { get; set; }
     }
 
     public class OrderDto
