@@ -10,7 +10,7 @@ using webbshop2.Data;
 namespace webbshop2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220110192223_initialCreate")]
+    [Migration("20220113181225_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -258,6 +258,26 @@ namespace webbshop2.Migrations
                         });
                 });
 
+            modelBuilder.Entity("webbshop2.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("webbshop2.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -317,6 +337,9 @@ namespace webbshop2.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -334,6 +357,8 @@ namespace webbshop2.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -389,6 +414,13 @@ namespace webbshop2.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("webbshop2.Models.Category", b =>
+                {
+                    b.HasOne("webbshop2.Models.Category", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+                });
+
             modelBuilder.Entity("webbshop2.Models.Order", b =>
                 {
                     b.HasOne("webbshop2.Authentication.ApplicationUser", "Customer")
@@ -411,6 +443,13 @@ namespace webbshop2.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("webbshop2.Models.Product", b =>
+                {
+                    b.HasOne("webbshop2.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
                 });
 #pragma warning restore 612, 618
         }

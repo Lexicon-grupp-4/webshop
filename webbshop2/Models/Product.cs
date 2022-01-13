@@ -15,6 +15,7 @@ namespace webbshop2.Models
         public string Description { get; set; }
         public float Price { get; set; }
         public string PictureUrl { get; set; }
+        public Category Category { get; set; }
         //public string Type { get; set; }
         //public string Brand { get; set; }
         public int Quantity { get; set; }

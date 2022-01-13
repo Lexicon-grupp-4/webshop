@@ -11,6 +11,7 @@ import {
  } from './Auth';
 import { actionCreators as productsActions } from './Products';
 import { actionCreators as ordersActions } from './Orders';
+import { actionCreators as cateActions } from './Categories';
 
 export type LoaderMiddleware = Middleware<{}, ApplicationState>
 
@@ -30,6 +31,8 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
         storeAPI.dispatch(authActions.verifyAuthenticationToken());
         // @ts-ignore
         storeAPI.dispatch(productsActions.requestProducts());
+        // @ts-ignore
+        storeAPI.dispatch(cateActions.requestCategories());
     } else if (action.type === CREDENTIALS_LOGIN_SUCCESS) {
         // After successfull login move to route /
         storeAPI.dispatch(push(''));
