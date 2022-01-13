@@ -15,6 +15,7 @@ namespace webbshop2.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +35,12 @@ namespace webbshop2.Data
 
             modelBuilder.Entity<OrderItem>()
                 .HasOne(c => c.Product);
+
+            modelBuilder.Entity<Category>()
+                .HasOne(c => c.Parent);
+
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Category);
 
             string adminId = "33734c07-3f1a-4b37-8330-5e947c2a9d57";
 

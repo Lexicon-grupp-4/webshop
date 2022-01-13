@@ -26,19 +26,87 @@ namespace webbshop2.Data
                 return;   // DB has been seeded
             }
 
-            Product prod1 = new Product { Name = "Hammare", Price = 100, Quantity = 20, PictureUrl = "/images/products/p.png", Description = "description" };
-            Product prod2 = new Product { Name = "Köttbulletång", Price = 210, Quantity = 6, PictureUrl = "/images/products/p.png", Description = "description" };
-            Product prod3 = new Product { Name = "Borrmaskin", Price = 2000, Quantity = 3, PictureUrl = "/images/products/p.png", Description = "description" };
-            Product prod4 = new Product { Name = "Skruvmejsel", Price = 250, Quantity = 300, PictureUrl = "/images/products/p.png", Description = "description" };
-            Product prod5 = new Product { Name = "Såg", Price = 300, Quantity = 120, PictureUrl = "/images/products/p.png", Description = "description" };
+            // Some arbitrary hierarchical categories
+            Category root = new Category() { Name = "root" };
+            Category c1_furniture = new Category() { Name = "Möbler", Parent = root };
+            Category c11 = new Category() { Name = "Bord", Parent = c1_furniture };
+            Category c12 = new Category() { Name = "Stolar", Parent = c1_furniture };
+            Category c2_tools = new Category() { Name = "Verktyg", Parent = root };
+            Category c21 = new Category() { Name = "Snickar Verktyg", Parent = c2_tools };
+            Category c22 = new Category() { Name = "Mekaniker Verktyg", Parent = c2_tools };
+            Category c3_clothes = new Category() { Name = "Kläder", Parent = root };
+            Category c31 = new Category() { Name = "Tröjor", Parent = c3_clothes };
+            Category c32 = new Category() { Name = "Byxor", Parent = c3_clothes };
+            Category c33 = new Category() { Name = "Hattar", Parent = c3_clothes };
+            Category c4_vehicles = new Category() { Name = "Fordon", Parent = root };
+            Category c41 = new Category() { Name = "Cycklar", Parent = c4_vehicles };
+            Category c42 = new Category() { Name = "Mopeder", Parent = c4_vehicles };
+            Category c5_art = new Category() { Name = "Konst", Parent = root };
+            Category c51 = new Category() { Name = "Bildkonst", Parent = c5_art };
+            Category c52 = new Category() { Name = "Skulpturer", Parent = c5_art };
+            Category c6_media = new Category() { Name = "Media", Parent = root };
+            Category c61 = new Category() { Name = "Böcker", Parent = c6_media };
+            Category c62 = new Category() { Name = "Tidningar", Parent = c6_media };
 
-            _context.Products.Add(prod1);
-            _context.Products.Add(prod2);
-            _context.Products.Add(prod3);
-            _context.Products.Add(prod4);
-            _context.Products.Add(prod5);
+            var categories = new Category[]
+            {
+                root,
+                c1_furniture, c11, c12,
+                c2_tools, c21, c22,
+                c3_clothes, c31, c32, c33,
+                c4_vehicles, c41, c42,
+                c5_art, c51, c52,
+                c6_media, c61, c62,
+            };
 
-            _context.SaveChanges();
+            foreach (Category c in categories)
+            {
+                _context.Categories.Add(c);
+            }
+
+            var prods = new Product[]
+            {
+                new Product {
+                    Name = "Hammare", Category = c21,
+                    Price = 100, Quantity = 20,
+                    Description = "600 kilogram." },
+                new Product {
+                    Name = "Flaktång", Category = c22,
+                    Price = 210,  Quantity = 6,
+                    Description = "Greppvänlig, huvudsakligen i plastmaterial."
+                },
+                new Product {
+                    Name = "Borrmaskin", Category = c22,
+                    Price = 2000, Quantity = 3,
+                    Description = "Med 10 extra borr."
+                },
+                new Product {
+                    Name = "Skruvmejsel", Category = c22,
+                    Price = 250, Quantity = 300,
+                    Description = "Helt rak"
+                },
+                new Product {
+                    Name = "Såg", Category = c21,
+                    Price = 300, Quantity = 120,
+                    Description = "ganska taggig"
+                },
+                new Product {
+                    Name = "Sommar Klänning",  Category = c3_clothes,
+                    Price = 400,  Quantity = 2,
+                    Description = "Prasslande i lätt material."
+                },
+                new Product {
+                    Name = "Party Tröjan",  Category = c31,
+                    Price = 150,  Quantity = 10,
+                    Description = "Mjuk och sövande tröja"
+                }
+            };
+
+            foreach (Product p in prods)
+            {
+                p.PictureUrl = "/images/products/p.png";
+                _context.Products.Add(p);
+            }
 
             string user10Id = "577d7a59-0221-4bb7-be67-3bbaad46022c";
             string user11Id = "ff92bb06-898e-4f2d-815f-50b00fb9793d";
@@ -86,11 +154,11 @@ namespace webbshop2.Data
             _context.Orders.Add(oder2);
             _context.SaveChanges();
 
-            OrderItem order1Item1 = new OrderItem { Order = oder1, Product = prod1, Price = prod1.Price, Quantity = 1 };
-            OrderItem order1Item2 = new OrderItem { Order = oder1, Product = prod2, Price = prod2.Price, Quantity = 1 };
-            OrderItem order1Item3 = new OrderItem { Order = oder1, Product = prod3, Price = prod3.Price * 3, Quantity = 3 };
-            OrderItem order2Item1 = new OrderItem { Order = oder2, Product = prod4, Price = prod5.Price, Quantity = 1 };
-            OrderItem order2Item2 = new OrderItem { Order = oder2, Product = prod5, Price = prod5.Price, Quantity = 1 };
+            OrderItem order1Item1 = new OrderItem { Order = oder1, Product = prods[0], Price = prods[0].Price, Quantity = 1 };
+            OrderItem order1Item2 = new OrderItem { Order = oder1, Product = prods[1], Price = prods[1].Price, Quantity = 1 };
+            OrderItem order1Item3 = new OrderItem { Order = oder1, Product = prods[2], Price = prods[2].Price * 3, Quantity = 3 }; // hmm 
+            OrderItem order2Item1 = new OrderItem { Order = oder2, Product = prods[3], Price = prods[3].Price, Quantity = 1 };
+            OrderItem order2Item2 = new OrderItem { Order = oder2, Product = prods[4], Price = prods[4].Price, Quantity = 1 };
 
             _context.OrderItems.Add(order1Item1);
             _context.OrderItems.Add(order1Item2);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button } from 'reactstrap';
+import { Container, Button } from 'reactstrap';
 import { CartItem } from '../store/DomainClasses';
 import { 
     selectOrderItems,
@@ -30,7 +30,7 @@ export default function ShoppingCartPage() {
         dispatch({ type: REMOVE_PRODUCT, orderItem} as RemoveProductAction);
     }
     return (
-        <>
+        <Container>
             <table className={'table'}>
                 <thead>
                     <tr>
@@ -42,6 +42,6 @@ export default function ShoppingCartPage() {
                 <tbody>{items && makeList(items, selectOrderItem, removeOrderItem)}</tbody>
             </table>
             <Button disabled={items.length === 0} onClick={() => dispatch(actionCreators.postOrder())}>Skicka Order</Button>
-        </>
+        </Container>
     );
 }

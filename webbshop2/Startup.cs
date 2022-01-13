@@ -77,6 +77,7 @@ namespace webbshop2
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICategoriesService, CategoriesService>();
             services.AddTransient<DbSeedData>();
         }
 

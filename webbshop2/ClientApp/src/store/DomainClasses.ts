@@ -19,6 +19,11 @@ export interface ProductDto {
     price: number;
     quantity: number;
 }
+export interface CategoryDto {
+    id: number;
+    name: number;
+    parentId: number;
+}
 
 // maybe it's just identical to product
 export interface CartItem extends ProductDto {}
