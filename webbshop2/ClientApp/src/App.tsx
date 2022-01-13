@@ -5,7 +5,7 @@ import Home from './components/Home';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import ShoppingCartPage from './pages/ShoppingCartPage';
-import OrdersPage from './pages/OrdersPage';
+import OrdersPage from './pages/OrdesPage';
 
 import './custom.css'
 

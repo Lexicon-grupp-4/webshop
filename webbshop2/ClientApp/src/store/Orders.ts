@@ -58,7 +58,7 @@ export const actionCreators = {
 
 const unloadedState: HistoricOrdersState = { orders: [], isLoading: false };
 
-export const reducer: Reducer<HistoricOrdersState> = (state: HistoricOrdersState | undefined, incomingAction: Action): ProductsState => {
+export const reducer: Reducer<HistoricOrdersState> = (state: HistoricOrdersState | undefined, incomingAction: Action): HistoricOrdersState => {
     if (state === undefined) {
         return unloadedState;
     }

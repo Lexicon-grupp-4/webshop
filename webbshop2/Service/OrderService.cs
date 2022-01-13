@@ -74,6 +74,7 @@ namespace webbshop2.Service
                     Quantity = item.Quantity,
                     ProductId = item.Product.Id,
                     Price = item.Price,
+                    Name = item.Product.Name,
                 };
                 orderDto.Items.Add(itemDto);
             }

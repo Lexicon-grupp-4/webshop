@@ -5,6 +5,7 @@ export interface OrderItemDto {
     quantity: number;
     productId?: number;
     price?: number;
+    name?: string;
 }
 export interface OrderDto {
     id?: number;
