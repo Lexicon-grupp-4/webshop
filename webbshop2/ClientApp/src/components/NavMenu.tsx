@@ -23,7 +23,10 @@ export default function NavMenu() {
                                 <NavLink tag={Link} className="text-dark" to="/">Artiklar</NavLink>
                             </NavItem>
                             <NavOrders />
-                            <NavShoppingCart/>
+                            <NavShoppingCart />
+                            <NavItem>
+                                <NavLink tag={Link} className="text-dark" to="/aboutcontactpage">About & Contact</NavLink>
+                            </NavItem>
                             <NavLoginTab />
                         </ul>
                     </Collapse>
