@@ -21,7 +21,7 @@ export interface ProductDto {
 }
 export interface CategoryDto {
     id: number;
-    name: number;
+    name: string;
     parentId: number;
 }
 

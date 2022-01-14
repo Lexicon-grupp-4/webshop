@@ -13,9 +13,13 @@ const makeList = (products: Product[], handleClick: any, handleAdd: any) =>
             <th><button onClick={() => handleAdd(p)}>lägg i varukorg</button></th>
         </tr>
         );
-    });
+});
+    
+type Props = {
+    cat1?: string
+}
 
-export default function ProductList() {
+export default function ProductList({ cat1 }: Props) {
     const products = useSelector(selectProducts);
     const dispatch = useDispatch();
     function selectProduct(id: number) {
