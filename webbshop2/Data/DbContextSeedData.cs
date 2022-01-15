@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using webbshop2.Authentication;
 using webbshop2.Models;
@@ -108,6 +109,12 @@ namespace webbshop2.Data
                 _context.Products.Add(p);
             }
 
+            foreach (Product p in GenereateProducts(categories, 100))
+            {
+                p.PictureUrl = "/images/products/p.png";
+                _context.Products.Add(p);
+            }
+
             string user10Id = "577d7a59-0221-4bb7-be67-3bbaad46022c";
             string user11Id = "ff92bb06-898e-4f2d-815f-50b00fb9793d";
             var user1 = new ApplicationUser
@@ -166,6 +173,26 @@ namespace webbshop2.Data
             _context.OrderItems.Add(order2Item1);
             _context.OrderItems.Add(order2Item2);
             _context.SaveChanges();
+        }
+
+        public List<Product> GenereateProducts(Category[] cats, int nProducts)
+        {
+            // TODO connced to 4-5 random image links
+            Random r = new Random();
+            List<Product> products = new List<Product>();
+            for (int i = 0; i < nProducts; i++)
+            {
+                Product prod = new Product()
+                {
+                    Name = String.Format("prod{0}", i),
+                    Description = "det här är bara en dummy",
+                    Price = r.Next(10, 1000),
+                    Quantity = r.Next(10, 100),
+                    Category = cats[r.Next(1, cats.Length)]
+                };
+                products.Add(prod);
+            }
+            return products;
         }
     }
 }

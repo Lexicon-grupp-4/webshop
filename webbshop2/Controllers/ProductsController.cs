@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using webbshop2.Models;
+using webbshop2.Dtos;
 using webbshop2.Service;
 
 namespace webbshop2.Controllers
@@ -10,22 +10,23 @@ namespace webbshop2.Controllers
     [Route("api/[controller]")]
     public class ProductsController
     {
-        readonly IProductsService _productsService;
+        readonly IProductsService productsService;
 
         public ProductsController(IProductsService productsService)
         {
-            _productsService = productsService;
+            this.productsService = productsService;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Product>> Get()
+        public async Task<IEnumerable<ProductDto>> Get()
         {
-            return await _productsService.GetProducts();
+            return await productsService.GetProducts();
         }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
-            return await _productsService.GetProduct(id);
+            return await productsService.GetProductDto(id);
         }
     }
 }

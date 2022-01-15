@@ -1,6 +1,7 @@
 import { Middleware } from 'redux';
 import { ApplicationState } from './';
-import { push } from "connected-react-router";
+import { matchPath } from "react-router";
+import { push, LOCATION_CHANGE, LocationChangeAction } from "connected-react-router";
 import { 
     CREDENTIALS_LOGIN_SUCCESS, 
     REGISTER_ACCOUNT_SUCCESS, 
@@ -9,9 +10,17 @@ import {
     TOKEN_VERIFICATION_SUCCESS,
     LOGOUT
  } from './Auth';
-import { actionCreators as productsActions } from './Products';
+import { 
+    actionCreators as productsActions, 
+    SELECT_PRODUCTS_BY_CATEGORIES,
+    SelectProductsByCategoriesAction
+ } from './Products';
 import { actionCreators as ordersActions } from './Orders';
-import { actionCreators as cateActions } from './Categories';
+import {
+    actionCreators as cateActions, 
+    SELECT_CATEGORIES,
+    SelectCategoriesAction
+} from './Categories';
 
 export type LoaderMiddleware = Middleware<{}, ApplicationState>
 
@@ -50,6 +59,18 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
         }, 100)
     } else if (action.type === LOGOUT) {
         storeAPI.dispatch({type: APP_CLEAR_PERSONAL_DATA});
+    } else if (action.type === LOCATION_CHANGE) {
+        const act = action as LocationChangeAction;
+        const res = matchPath(act.payload.location.pathname, {
+            path: "/produkter/:cat1?"
+        });
+        // @ts-ignore
+        if (!!res) storeAPI.dispatch(cateActions.selectCategories(res.params.cat1));
+    } else if (action.type === SELECT_CATEGORIES) {
+        // note: maybe introduce SELECT_CATEGORIES_CHANGED
+        const categories = (action as SelectCategoriesAction).selectedSubCategories;
+        storeAPI.dispatch({ type: SELECT_PRODUCTS_BY_CATEGORIES, categories } as 
+            SelectProductsByCategoriesAction );
     }
     return n;
 }
