@@ -13,6 +13,7 @@ import './custom.css'
 export default () => (
     <Layout>
         <Route exact path='/' component={ProductsPage} />
+        <Route exact path='/produkter/:cat1?' component={ProductsPage} />
         <Route path='/login' component={LoginPage} />
         <Route path='/register' component={RegisterPage} />
         <Route path='/cart' component={ShoppingCartPage} />

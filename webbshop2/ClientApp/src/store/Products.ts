@@ -2,37 +2,44 @@ import { Action, Reducer } from 'redux';
 import { AppThunkAction } from '.';
 import { ApplicationState } from './index';
 import { ProductDto } from './DomainClasses';
+import { transformProducts } from '../helper_functions/transform_functions';
 
-// -----------------
-// STATE - This defines the type of data maintained in the Redux store.
+// STATE
 
 export interface ProductsState {
     isLoading: boolean;
     products: Product[];
 }
 
-export interface Product extends ProductDto {}
+export interface Product extends ProductDto {
+    display: boolean;
+}
 
-// -----------------
-// ACTIONS - These are serializable (hence replayable) descriptions of state transitions.
-// They do not themselves have any side-effects; they just describe something that is going to happen.
+// ACTIONS
+
+export const REQUEST_PRODUCTS = 'prods/REQUEST_PRODUCTS';
+export const RECEIVE_PRODUCTS = 'prods/RECEIVE_PRODUCTS';
+export const SELECT_PRODUCTS_BY_CATEGORIES = 'prods/SELECT_PRODUCTS_BY_CATEGORIES';
 
 interface RequestProductsAction {
-    type: 'REQUEST_PRODUCTS';
+    type: 'prods/REQUEST_PRODUCTS';
 }
 
 interface ReceiveProductsAction {
-    type: 'RECEIVE_PRODUCTS';
+    type: 'prods/RECEIVE_PRODUCTS';
     products: Product[];
+}
+
+export interface SelectProductsByCategoriesAction {
+    type: 'prods/SELECT_PRODUCTS_BY_CATEGORIES';
+    categories: number[];
 }
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
-type KnownAction = RequestProductsAction | ReceiveProductsAction;
+type KnownAction = RequestProductsAction | ReceiveProductsAction | SelectProductsByCategoriesAction;
 
-// ----------------
-// ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
-// They don't directly mutate state, but they can have external side-effects (such as loading data).
+// ACTION CREATORS
 
 export const actionCreators = {
     requestProducts: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
@@ -41,12 +48,16 @@ export const actionCreators = {
         if (appState) {
             fetch(`api/products`)
                 .then(response => response.json() as Promise<Product[]>)
-                .then(data => {
-                    dispatch({ type: 'RECEIVE_PRODUCTS', products: data });
+                .then((products: ProductDto[]) => {
+                    transformProducts(products as Product[]);
+                    dispatch({ type: RECEIVE_PRODUCTS, products: products as Product[] });
                 });
 
-            dispatch({ type: 'REQUEST_PRODUCTS' });
+            dispatch({ type: REQUEST_PRODUCTS });
         }
+    },
+    selectProductsByCategories: (categories: number[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        dispatch({ type: SELECT_PRODUCTS_BY_CATEGORIES, categories });
     }
 };
 
@@ -62,16 +73,26 @@ export const reducer: Reducer<ProductsState> = (state: ProductsState | undefined
 
     const action = incomingAction as KnownAction;
     switch (action.type) {
-        case 'REQUEST_PRODUCTS':
+        case REQUEST_PRODUCTS:
             return {
                 products: state.products,
                 isLoading: true
             };
-        case 'RECEIVE_PRODUCTS':
+        case RECEIVE_PRODUCTS:
             return {
                 products: action.products,
                 isLoading: false
             };
+        case SELECT_PRODUCTS_BY_CATEGORIES: {
+            const products = [...state.products];
+            products.forEach(p => {
+                p.display = !!action.categories.find(id => id === p.categoryId);
+            });
+            return {
+                ...state,
+                products
+            };
+        }
     }
 
     return state;

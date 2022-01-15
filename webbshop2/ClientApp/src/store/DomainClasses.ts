@@ -7,21 +7,25 @@ export interface OrderItemDto {
     price?: number;
     name?: string;
 }
+
 export interface OrderDto {
     id?: number;
     items: OrderItemDto[];
     date?: string; // string for now
     status?: string; // string for now, maybe enum
 }
+
 export interface ProductDto {
     id: number;
     name: number;
     price: number;
     quantity: number;
+    categoryId?: number;
 }
+
 export interface CategoryDto {
     id: number;
-    name: number;
+    name: string;
     parentId: number;
 }
 
