@@ -61,11 +61,11 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
         storeAPI.dispatch({type: APP_CLEAR_PERSONAL_DATA});
     } else if (action.type === LOCATION_CHANGE) {
         const act = action as LocationChangeAction;
-        const res = matchPath(act.payload.location.pathname, {
-            path: "/produkter/:cat1?"
+        const catPathMatch = matchPath(act.payload.location.pathname, {
+            path: "/produkter/:cat1/:cat2?"
         });
         // @ts-ignore
-        if (!!res) storeAPI.dispatch(cateActions.selectCategories(res.params.cat1));
+        if (!!catPathMatch) storeAPI.dispatch(cateActions.selectCategories(catPathMatch.params.cat1, catPathMatch.params.cat2));
     } else if (action.type === SELECT_CATEGORIES) {
         // note: maybe introduce SELECT_CATEGORIES_CHANGED
         const categories = (action as SelectCategoriesAction).selectedSubCategories;

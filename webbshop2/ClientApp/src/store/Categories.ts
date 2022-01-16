@@ -58,19 +58,23 @@ export const actionCreators = {
             dispatch({ type: REQUEST_CATEGORIES });
         }
     },
-    selectCategories: (cat1Name: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        // TODO handle filtration by subcategories too
+    selectCategories: (cat1Name: string, cat2Name: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
         const categories = appState.cate!.categories;
-        const cat = categories.find(c => c.uriName === cat1Name);
-        if (!!cat) {
-            if (cat.id === appState.cate!.selectedCategoryId) return; // no change
-            const selectedSubCategories = [cat.id] as number[];
+        const cat1 = categories.find(c => c.uriName === cat1Name);
+        const cat2 = categories.find(c => c.uriName === cat2Name);
+        if (!!cat2) {
+            if (cat2.id === appState.cate!.selectedCategoryId) return; // no change
+            const selectedSubCategories = [cat2.id] as number[];
+            dispatch({ type: SELECT_CATEGORIES, selectedCatId: cat2.id, selectedSubCategories });
+        } else if (!!cat1) {
+            if (cat1.id === appState.cate!.selectedCategoryId) return; // no change
+            const selectedSubCategories = [cat1.id] as number[];
             // selecting sub categories under parentcategory
             categories.forEach(c => {
-                if (c.parentId === cat.id) selectedSubCategories.push(c.id);
+                if (c.parentId === cat1.id) selectedSubCategories.push(c.id);
             })
-            dispatch({ type: SELECT_CATEGORIES, selectedCatId: cat.id, selectedSubCategories });
+            dispatch({ type: SELECT_CATEGORIES, selectedCatId: cat1.id, selectedSubCategories });
         }
     }
 }
