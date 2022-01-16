@@ -1,34 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import ProductList from '../../components/ProductList';
-import { Container, TabContent, Nav, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import { selectTopCategorys, Category } from '../../store/Categories';
-import colors from '../../config/colors';
+import { Container, TabContent } from 'reactstrap';
+import CategoriesMenu from './CategoriesMenu';
 
 function ProductPage() {
-    const topCats = useSelector(selectTopCategorys);
-    const selStyle = {backgroundColor: colors.active_table_row};
     return (
         <>
             <Container>
-                <Nav tabs className={"nav nav-pills nav-fill"}>
-                    {topCats.map((cat:Category) => {
-                        const { isSelected } = cat;
-                        return (
-                            <NavItem key={cat.id} >
-                                <NavLink 
-                                    tag={Link} 
-                                    className="text-dark"
-                                    style={isSelected?selStyle:undefined}
-                                    to={`/produkter/${cat.uriName}/`}
-                                >
-                                    {cat.name}
-                                </NavLink>
-                            </NavItem>
-                        );
-                    })}
-                </Nav>
+                <CategoriesMenu />
             </Container>
             <br />
             <TabContent activeTab={1}>
