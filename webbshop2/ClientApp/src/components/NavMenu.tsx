@@ -25,7 +25,7 @@ export default function NavMenu() {
                             <NavOrders />
                             <NavShoppingCart />
                             <NavItem>
-                                <NavLink tag={Link} className="text-dark" to="/aboutcontactpage">About & Contact</NavLink>
+                                <NavLink tag={Link} className="text-dark" to="/aboutcontactpage">Kontakt & Info</NavLink>
                             </NavItem>
                             <NavLoginTab />
                         </ul>
