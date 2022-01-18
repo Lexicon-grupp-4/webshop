@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router';
 import ProductPage from './pages/ProductsPages';
 import OrdersPage from './pages/OrdersPage';
+import Layout from './components/Layout';
 
 import { useAppDispatch } from './redux/hooks';
 // import {
@@ -12,15 +13,14 @@ import {
     receive,
     fetchCategriesAsync
 } from './redux/categories.slice';
-import { ConnectedRouter } from 'connected-react-router';
-import { history } from './redux/store';
+
 
 import './App.css';
 
 function App() {
     const dispatch = useAppDispatch();
     return (
-        <ConnectedRouter history={history}>
+        <Layout>
             <Switch> 
             <Route path="/" exact component={ProductPage} />
             <Route path="/odrar" component={OrdersPage} />
@@ -38,7 +38,7 @@ function App() {
             > 
                     cats async
             </button>
-        </ConnectedRouter>
+        </Layout>
     );
 }
 
