@@ -17,7 +17,7 @@ type OrdersTableProps = {
 
 function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab}: OrdersTableProps) {
     return (
-        <Dropdown isOpen={openTab === idx} toggle={() => {}}>
+        <Dropdown isOpen={openTab === idx} toggle={() => {if(openTab !== 0) setOpenTab(0)}}>
             <DropdownToggle
                 tag="span"
                 style={{width: '100%'}}

@@ -27,7 +27,8 @@ export function transformCategories(cats: Category[]) {
 }
 
 export function transformProducts(prods: Product[]) {
+    prods.sort((a, b) => a.id - b.id);
     prods.forEach(p => {
-        p.display = true
+        p.display = true;
     });
 }

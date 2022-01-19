@@ -13,7 +13,9 @@ import {
 import { 
     actionCreators as productsActions, 
     SELECT_PRODUCTS_BY_CATEGORIES,
-    SelectProductsByCategoriesAction
+    UPDATE_SELECTION,
+    SelectProductsByCategoriesAction,
+    UpdateProductSelectionAction
  } from './Products';
 import { actionCreators as ordersActions } from './Orders';
 import {
@@ -21,6 +23,10 @@ import {
     SELECT_CATEGORIES,
     SelectCategoriesAction
 } from './Categories';
+import {
+    ADD_PRODUCT,
+    AddProductAction
+} from './ShoppingCart';
 
 export type LoaderMiddleware = Middleware<{}, ApplicationState>
 
@@ -71,6 +77,11 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
         const categories = (action as SelectCategoriesAction).selectedSubCategories;
         storeAPI.dispatch({ type: SELECT_PRODUCTS_BY_CATEGORIES, categories } as 
             SelectProductsByCategoriesAction );
+    } else if (action.type === ADD_PRODUCT) {
+        const orderItem = (action as AddProductAction).orderItem;
+        const { productId, quantity } = orderItem;
+        storeAPI.dispatch({ type: UPDATE_SELECTION, productId, quantity } as 
+            UpdateProductSelectionAction );
     }
     return n;
 }

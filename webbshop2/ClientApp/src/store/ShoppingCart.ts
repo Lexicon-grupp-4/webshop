@@ -2,10 +2,15 @@ import { Action, Reducer } from 'redux';
 import { AppThunkAction } from '.';
 import { ApplicationState } from './index';
 import { getToken } from '../tokenService';
-import { OrderDto, CartItem } from './DomainClasses';
+import { OrderDto, OrderItemDto } from './DomainClasses';
 
 export interface ShoppingCartState {
     orderItems: CartItem[];
+}
+
+// maybe it's just identical to product
+export interface CartItem extends OrderItemDto {
+    name: string;
 }
 
 // ACTIONS 
@@ -16,7 +21,7 @@ export const SEND_ORDER = 'cart/SEND_ORDER';
 export const SEND_ORDER_SUCCESS = 'cart/SEND_ORDER_SUCCESS';
 export const SEND_ORDER_FAILURE = 'cart/SEND_ORDER_FAILURE';
 
-interface AddProductAction {
+export interface AddProductAction {
     type: 'cart/ADD_PRODUCT';
     orderItem: CartItem;
 }
@@ -88,9 +93,10 @@ export const reducer: Reducer<ShoppingCartState> = (state: ShoppingCartState | u
     const action = incomingAction as KnownAction;
     switch (action.type) {
         case ADD_PRODUCT: {
+            // TODO check closer!
             const orderItems = [...state.orderItems] as CartItem[];
             const found = orderItems.find(i => i.id === action.orderItem.id);
-            if (found) found.quantity += action.orderItem.quantity;
+            if (found) found.quantity = action.orderItem.quantity;
             else orderItems.push(action.orderItem);
             return {
                 ...state,

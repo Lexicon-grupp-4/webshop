@@ -19,3 +19,13 @@
     right: 20px;
     bottom: 20px;
 }
+
+.produts-list-item-inner {
+    position: relative;
+}
+
+.produts-list-item-reserved-number {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
