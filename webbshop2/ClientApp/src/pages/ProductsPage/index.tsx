@@ -1,7 +1,8 @@
 import React from 'react';
-import ProductList from '../../components/ProductList';
-import { Container, TabContent } from 'reactstrap';
+// import ProductList from '../../components/ProductList';
+import { Container } from 'reactstrap';
 import CategoriesMenu from './CategoriesMenu';
+import ProductList from  './Productlist';
 
 function ProductPage() {
     return (
@@ -10,11 +11,7 @@ function ProductPage() {
                 <CategoriesMenu />
             </Container>
             <br />
-            <TabContent activeTab={1}>
-                <Container>
-                    <ProductList cat1={'cat1'} />
-                </Container>
-            </TabContent>
+            <ProductList />
         </>
     )
 }

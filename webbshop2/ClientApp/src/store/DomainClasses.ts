@@ -17,10 +17,11 @@ export interface OrderDto {
 
 export interface ProductDto {
     id: number;
-    name: number;
+    name: string;
     price: number;
     quantity: number;
     categoryId?: number;
+    pictureUrl?: string;
 }
 
 export interface CategoryDto {

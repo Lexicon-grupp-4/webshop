@@ -105,13 +105,12 @@ namespace webbshop2.Data
 
             foreach (Product p in prods)
             {
-                p.PictureUrl = "/images/products/p.png";
+                p.PictureUrl = getRandomImage();
                 _context.Products.Add(p);
             }
 
-            foreach (Product p in GenereateProducts(categories, 100))
+            foreach (Product p in GenereateProducts(categories, 500))
             {
-                p.PictureUrl = "/images/products/p.png";
                 _context.Products.Add(p);
             }
 
@@ -175,7 +174,7 @@ namespace webbshop2.Data
             _context.SaveChanges();
         }
 
-        public List<Product> GenereateProducts(Category[] cats, int nProducts)
+        private List<Product> GenereateProducts(Category[] cats, int nProducts)
         {
             // TODO connced to 4-5 random image links
             Random r = new Random();
@@ -188,11 +187,20 @@ namespace webbshop2.Data
                     Description = "det här är bara en dummy",
                     Price = r.Next(10, 1000),
                     Quantity = r.Next(10, 100),
-                    Category = cats[r.Next(1, cats.Length)]
+                    Category = cats[r.Next(1, cats.Length)],
+                    PictureUrl = getRandomImage()
                 };
                 products.Add(prod);
             }
             return products;
+        }
+
+        private String getRandomImage()
+        {
+            string[] images = { "mouth_guard.jpg", "syringe.jpg", "handcuffs.jpg", "gasmask.png" };
+            Random rand = new Random();
+            int index = rand.Next(images.Length);
+            return images[index];
         }
     }
 }
