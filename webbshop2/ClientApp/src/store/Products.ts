@@ -13,6 +13,7 @@ export interface ProductsState {
 
 export interface Product extends ProductDto {
     display: boolean;
+    reserved_quantity?: number; // reserved for shopping cart
 }
 
 // ACTIONS
@@ -20,6 +21,7 @@ export interface Product extends ProductDto {
 export const REQUEST_PRODUCTS = 'prods/REQUEST_PRODUCTS';
 export const RECEIVE_PRODUCTS = 'prods/RECEIVE_PRODUCTS';
 export const SELECT_PRODUCTS_BY_CATEGORIES = 'prods/SELECT_PRODUCTS_BY_CATEGORIES';
+export const UPDATE_SELECTION = 'prods/UPDATE_SELECTION';
 
 interface RequestProductsAction {
     type: 'prods/REQUEST_PRODUCTS';
@@ -35,9 +37,14 @@ export interface SelectProductsByCategoriesAction {
     categories: number[];
 }
 
-// Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
-// declared type strings (and not any other arbitrary string).
-type KnownAction = RequestProductsAction | ReceiveProductsAction | SelectProductsByCategoriesAction;
+interface UpdateProductSelectionAction {
+    type: 'prods/UPDATE_SELECTION';
+    productId: number;
+    reserved_quantity: number;
+}
+
+type KnownAction = RequestProductsAction | ReceiveProductsAction 
+    | SelectProductsByCategoriesAction | UpdateProductSelectionAction;
 
 // ACTION CREATORS
 
@@ -92,6 +99,22 @@ export const reducer: Reducer<ProductsState> = (state: ProductsState | undefined
                 ...state,
                 products
             };
+        }
+        case UPDATE_SELECTION: {
+            // NOTE: too much logic here
+            const prodIdx = state.products.findIndex(p => p.id === action.productId);
+            if (prodIdx === -1) {
+                console.log('not found', prodIdx);
+                break;
+            }
+            const changed: Product = { ...state.products[prodIdx], reserved_quantity: action.quantity };
+            const unchanged = state.products.filter(p => p.id !== action.productId);
+            const prods = [...unchanged, changed] as Product[];
+            prods.sort((a, b) => a.id - b.id); // expensive, a correct insert would be better
+            return {
+                ...state,
+                products: prods
+            };       
         }
     }
 

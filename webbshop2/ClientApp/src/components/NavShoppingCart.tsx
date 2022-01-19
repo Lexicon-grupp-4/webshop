@@ -8,11 +8,16 @@ import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 export default function NavShoppingCart() {
     const items = useSelector(selectOrderItems);
-    const count = items.length; // TODO count item.quantity
+    let nb = 0;
+    if (items.length) {
+        nb = items.map(a => a.quantity)
+            .reduce((a, b) => a + b); // TODO count item.quantity
+    }
+    
     return (
         <NavItem>
             <NavLink tag={Link} className="text-dark" to="/cart">
-                <FontAwesomeIcon icon={faShoppingCart}/>({count})
+                <FontAwesomeIcon icon={faShoppingCart}/>({nb})
             </NavLink>
         </NavItem>
     )

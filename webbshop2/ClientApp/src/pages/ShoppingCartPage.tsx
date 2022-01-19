@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Button } from 'reactstrap';
-import { CartItem } from '../store/DomainClasses';
+import { CartItem } from '../store/ShoppingCart';
 import { 
     selectOrderItems,
     REMOVE_PRODUCT, 

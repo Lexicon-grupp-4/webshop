@@ -1,7 +1,7 @@
 // These types are used for for both redux storage and communicate with backend.
 
 export interface OrderItemDto {
-    id: number;
+    id?: number;
     quantity: number;
     productId?: number;
     price?: number;
@@ -30,5 +30,4 @@ export interface CategoryDto {
     parentId: number;
 }
 
-// maybe it's just identical to product
-export interface CartItem extends ProductDto {}
+
