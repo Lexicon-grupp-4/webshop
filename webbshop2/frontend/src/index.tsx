@@ -6,6 +6,7 @@ import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import { ConnectedRouter } from 'connected-react-router';
+// import { Route, Switch } from 'react-router';
 import { history } from './redux/store';
 
 ReactDOM.render(

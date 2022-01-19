@@ -45,6 +45,6 @@ export const productsSlice = createSlice({
 
 export const { receive } = productsSlice.actions;
 
-export const selectProducts = (state: RootState) => state.products.products;
+export const selectCategories = (state: RootState) => state.categories.categories;
 
 export default productsSlice.reducer;
