@@ -13,9 +13,9 @@ import {
 import { 
     actionCreators as productsActions, 
     SELECT_PRODUCTS_BY_CATEGORIES,
-    UPDATE_SELECTION,
+    UPDATE_RESERVATION,
     SelectProductsByCategoriesAction,
-    UpdateProductSelectionAction
+    UpdateProductReservationAction
  } from './Products';
 import { actionCreators as ordersActions } from './Orders';
 import {
@@ -80,8 +80,8 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
     } else if (action.type === ADD_PRODUCT) {
         const orderItem = (action as AddProductAction).orderItem;
         const { productId, quantity } = orderItem;
-        storeAPI.dispatch({ type: UPDATE_SELECTION, productId, quantity } as 
-            UpdateProductSelectionAction );
+        storeAPI.dispatch({ type: UPDATE_RESERVATION, productId, reserved_quantity: quantity } as 
+            UpdateProductReservationAction );
     }
     return n;
 }
