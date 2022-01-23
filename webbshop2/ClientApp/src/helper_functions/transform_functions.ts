@@ -1,5 +1,5 @@
 import { Order } from '../store/Orders';
-import { Category } from '../store/Categories';
+import { Category, CategoryPagination } from '../store/Categories';
 import { Product } from '../store/Products';
 import { prepairForUrl } from './string_functions';
 
@@ -23,6 +23,7 @@ export function transformCategories(cats: Category[]) {
     cats.forEach(c => {
         c.uriName = prepairForUrl(c.name);
         c.isSelected = true;
+        c.pagination = { loadedPageIdx: -1, isFullyLoaded: false};
     });
 }
 

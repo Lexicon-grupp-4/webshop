@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using System.Text;
 using webbshop2.Authentication;
 using webbshop2.Data;
@@ -96,8 +97,17 @@ namespace webbshop2
                 app.UseHsts();
             }
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    const int durationInSeconds = 60 * 60 * 24;
+                    ctx.Context.Response.Headers[HeaderNames.CacheControl] =
+                        "public,max-age=" + durationInSeconds;
+                }
+            });
+
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
             app.UseRouting();

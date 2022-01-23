@@ -1,8 +1,10 @@
 import React from 'react';
 import { Container, Card, CardTitle, CardSubtitle, CardBody, CardImg, Button, Badge } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectProducts, Product } from '../../store/Products';
+import { selectProducts, Product, selectProductsIsLoading, actionCreators as productsActions } from '../../store/Products';
+import { selectSelectedCategoryId, selectCategoryPagination, CategoryPagination } from '../../store/Categories';
 import { ADD_PRODUCT, CartItem } from '../../store/ShoppingCart';
+import { Waypoint } from 'react-waypoint';
 import './ProductList.css';
 
 type ProductViewProps = {
@@ -40,6 +42,7 @@ function ProductView({ product }: ProductViewProps) {
                     </CardSubtitle>
                     <CardImg
                         alt="product"
+                        rel="prefetch" 
                         src={imglink}
                         top
                         width="100%"
@@ -65,13 +68,43 @@ function ProductView({ product }: ProductViewProps) {
     );
 }
 
+type LoadMoreProps = {
+    categoryId: number
+}
+
+function TryLoadMore({ categoryId }: LoadMoreProps) {
+    const dispatch = useDispatch();
+    const isLoading = useSelector(selectProductsIsLoading);
+    const pagination = useSelector(selectCategoryPagination) as CategoryPagination;
+    const { isFullyLoaded, loadedPageIdx } = pagination;
+    if (isLoading) {
+        console.log('is already loading products');
+        return null;
+    }
+    
+    if (isFullyLoaded || loadedPageIdx < -1) return null;
+
+    console.log('rendering LoadMore');
+    function loadMore() {
+        console.log(`manually loading page: ${pagination.loadedPageIdx} more from catId: ${categoryId}`);
+        dispatch(productsActions.requestProducts(categoryId, pagination.loadedPageIdx + 1));
+    }
+
+    return (
+        <Waypoint onEnter={loadMore} ><div className="produts-list-item">hej</div></Waypoint>
+    );
+}
+
 export default function ProductList() {
     const products = useSelector(selectProducts);
+    const selectedCategoryId = useSelector(selectSelectedCategoryId);
     const visbleProducts = products.filter(p => p.display);
+
     return (
         <Container>
             <div className="produts-list-container">
                 {visbleProducts.map((p) => <ProductView key={p.id} product={p} />)}
+                <TryLoadMore categoryId={selectedCategoryId} />
             </div>
         </Container>
     );

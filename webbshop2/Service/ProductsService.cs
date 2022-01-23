@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using webbshop2.Data;
 using webbshop2.Dtos;
@@ -11,6 +12,7 @@ namespace webbshop2.Service
     public interface IProductsService
     {
         Task<List<ProductDto>> GetProducts();
+        Task<List<ProductDto>> GetProducts(int catId, int pageIdx);
         Task<Product> GetProduct(int id);
         Task<ProductDto> GetProductDto(int id);
     }
@@ -27,6 +29,18 @@ namespace webbshop2.Service
         public async Task<Product> GetProduct(int id)
         {
             return await _context.Products.FindAsync(id);
+        }
+
+        public async Task<List<ProductDto>> GetProducts(int catId, int pageIdx)
+        {
+            var products = await _context.Products
+                .OrderBy(p => p.Id)
+                .Include(p => p.Category)
+                .Where(c => c.Category.Id == catId || c.Category.Parent.Id == catId)
+                .Skip(pageIdx * 10).Take(10)
+                .ToListAsync();
+
+            return products.ConvertAll(new Converter<Product, ProductDto>(MakeProductDto));
         }
 
         public async Task<ProductDto> GetProductDto(int id)

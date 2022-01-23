@@ -25,11 +25,15 @@ export const UPDATE_RESERVATION = 'prods/UPDATE_RESERVATION';
 export const REMOVE_ALL_RESERVATIONS = 'prods/REMOVE_ALL_RESERVATIONS';
 
 interface RequestProductsAction {
+    catId?: number;
+    pageIdx?: number;
     type: 'prods/REQUEST_PRODUCTS';
 }
 
-interface ReceiveProductsAction {
+export interface ReceiveProductsAction {
     type: 'prods/RECEIVE_PRODUCTS';
+    catId?: number;
+    pageIdx?: number;
     products: Product[];
 }
 
@@ -55,21 +59,21 @@ type KnownAction = RequestProductsAction | ReceiveProductsAction
 // ACTION CREATORS
 
 export const actionCreators = {
-    requestProducts: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestProducts: (catId?: number, pageIdx?: number): AppThunkAction<KnownAction> => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
         if (appState) {
-            fetch(`api/products`)
+            fetch(`api/products?catId=${catId}&pageIdx=${pageIdx}`)
                 .then(response => response.json() as Promise<Product[]>)
                 .then((products: ProductDto[]) => {
                     transformProducts(products as Product[]);
-                    dispatch({ type: RECEIVE_PRODUCTS, products: products as Product[] });
+                    dispatch({ type: RECEIVE_PRODUCTS, products: products as Product[], catId, pageIdx});
                 });
 
             dispatch({ type: REQUEST_PRODUCTS });
         }
     },
-    selectProductsByCategories: (categories: number[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    selectProductsByCategories: (categories: number[]): AppThunkAction<KnownAction> => (dispatch) => {
         dispatch({ type: SELECT_PRODUCTS_BY_CATEGORIES, categories });
     }
 };
@@ -91,11 +95,17 @@ export const reducer: Reducer<ProductsState> = (state: ProductsState | undefined
                 products: state.products,
                 isLoading: true
             };
-        case RECEIVE_PRODUCTS:
+        case RECEIVE_PRODUCTS: {
+            const products = [...state.products];
+            action.products.forEach(incomingProd => {
+                const found = products.find(storedProd => storedProd.id === incomingProd.id);
+                if (!found) products.push(incomingProd);
+            });
             return {
-                products: action.products,
+                products,
                 isLoading: false
             };
+        }
         case SELECT_PRODUCTS_BY_CATEGORIES: {
             const products = [...state.products];
             products.forEach(p => {
@@ -138,3 +148,4 @@ export const reducer: Reducer<ProductsState> = (state: ProductsState | undefined
 // SELECTORS 
 
 export const selectProducts = (state: ApplicationState) => state.products!.products;
+export const selectProductsIsLoading = (state: ApplicationState) => state.products!.isLoading;

@@ -4,6 +4,8 @@ import { ApplicationState } from './index';
 import { CategoryDto } from './DomainClasses';
 import { getToken } from '../tokenService';
 import { transformCategories } from '../helper_functions/transform_functions';
+import { RECEIVE_PRODUCTS, ReceiveProductsAction  } from './Products';
+import apiSettings from '../config/apiSettings';
 
 // STATE
 
@@ -13,9 +15,17 @@ export interface CategoriesState {
     selectedCategoryId: number;
 }
 
+export interface CategoryPagination {
+    loadedPageIdx: number;
+    isFullyLoaded: boolean;
+}
+
 export interface Category extends CategoryDto {
     uriName: string;
     isSelected: boolean;
+    pagination: CategoryPagination;
+    // loadedPageIdx: number;
+    // isFullyLoaded: boolean;
 }
 
 export const REQUEST_CATEGORIES = 'cate/REQUEST_CATEGORIES';
@@ -37,7 +47,8 @@ export interface SelectCategoriesAction {
     selectedSubCategories: number[];
 }
 
-type KnownAction = RequestCategoriesAction | ReceiveCategoriesAction | SelectCategoriesAction;
+type KnownAction = RequestCategoriesAction | ReceiveCategoriesAction 
+| SelectCategoriesAction | ReceiveProductsAction;
 
 export const actionCreators = {
     requestCategories: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
@@ -111,7 +122,23 @@ export const reducer: Reducer<CategoriesState> = (state: CategoriesState | undef
                 isLoading: false,
                 selectedCategoryId: action.selectedCatId
             };
-        } 
+        }
+        case RECEIVE_PRODUCTS: {
+            const categories = [...state.categories];
+            const catIdx = categories.findIndex(c => c.id === action.catId);
+            if (catIdx >= 0) {
+                categories[catIdx].pagination.loadedPageIdx += 1; // maybe risky
+                console.log(`stepping upp cat: ${categories[catIdx].id} to nextPageIdx ${categories[catIdx].pagination.loadedPageIdx}`);
+                if (action.products.length < apiSettings.pageSize) {
+                    categories[catIdx].pagination = { ...categories[catIdx].pagination, isFullyLoaded: true};
+                    console.log('is fully loaded');
+                }
+            }
+            return {
+                ...state,
+                categories
+            };
+        }
     }
     return state;
 };
@@ -124,3 +151,10 @@ export const selectCategorys = (state: ApplicationState) => state.cate!.categori
 export const selectTopCategorys = (state: ApplicationState) => {
     return state.cate!.categories.filter(c => c.parentId === 1);
 };
+
+export const selectSelectedCategoryId = (state: ApplicationState) => state.cate!.selectedCategoryId;
+
+export const selectCategoryPagination = (state: ApplicationState) => {
+    const cat = state.cate!.categories.find(c => c.id === state.cate!.selectedCategoryId);
+    return cat? cat.pagination : {loadedPageIdx: -10, isFullyLoaded: false }; 
+}
