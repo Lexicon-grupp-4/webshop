@@ -13,13 +13,14 @@ function ProductView({ product }: ProductViewProps) {
     const dispatch = useDispatch();
     const baseUrl = window.location.origin;
     const imglink = `${baseUrl}/images/${product.pictureUrl}`;
-    const { name, quantity, reserved_quantity } = product;
+    const { name, quantity, reserved_quantity, price } = product;
     function AddProduct({name, id, reserved_quantity }: Product) {
         const quantity = reserved_quantity ? reserved_quantity + 1 : 1;
         const orderItem: CartItem = {
             id,
             productId: id,
             quantity,
+            price,
             name
         }
         dispatch({ type: ADD_PRODUCT, orderItem });

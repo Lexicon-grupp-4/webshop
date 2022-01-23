@@ -93,7 +93,6 @@ export const reducer: Reducer<ShoppingCartState> = (state: ShoppingCartState | u
     const action = incomingAction as KnownAction;
     switch (action.type) {
         case ADD_PRODUCT: {
-            // TODO check closer!
             const orderItems = [...state.orderItems] as CartItem[];
             const found = orderItems.find(i => i.id === action.orderItem.id);
             if (found) found.quantity = action.orderItem.quantity;
@@ -105,8 +104,14 @@ export const reducer: Reducer<ShoppingCartState> = (state: ShoppingCartState | u
         }
         case REMOVE_PRODUCT: {
             const items = [...state.orderItems] as CartItem[];
-            // TODO Maybe decrease quantity and remove only if quantity = 0
-            const orderItems = items.filter(i => i.id !== action.orderItem.id);
+            let orderItems = [...state.orderItems] as CartItem[];
+            const found = orderItems.find(i => i.id === action.orderItem.id);
+            if (found) {
+                found.quantity = action.orderItem.quantity;
+                if (found.quantity === 0) {
+                    orderItems = items.filter(i => i.id !== action.orderItem.id);
+                }
+            }
             return {
                 ...state,
                 orderItems
