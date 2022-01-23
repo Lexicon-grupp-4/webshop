@@ -13,9 +13,10 @@ import {
 import { 
     actionCreators as productsActions, 
     SELECT_PRODUCTS_BY_CATEGORIES,
-    UPDATE_SELECTION,
+    REMOVE_ALL_RESERVATIONS,
+    UPDATE_RESERVATION,
     SelectProductsByCategoriesAction,
-    UpdateProductSelectionAction
+    UpdateProductReservationAction,
  } from './Products';
 import { actionCreators as ordersActions } from './Orders';
 import {
@@ -25,6 +26,8 @@ import {
 } from './Categories';
 import {
     ADD_PRODUCT,
+    REMOVE_PRODUCT,
+    SEND_ORDER_SUCCESS,
     AddProductAction
 } from './ShoppingCart';
 
@@ -77,11 +80,13 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
         const categories = (action as SelectCategoriesAction).selectedSubCategories;
         storeAPI.dispatch({ type: SELECT_PRODUCTS_BY_CATEGORIES, categories } as 
             SelectProductsByCategoriesAction );
-    } else if (action.type === ADD_PRODUCT) {
+    } else if (action.type === ADD_PRODUCT || action.type === REMOVE_PRODUCT) {
         const orderItem = (action as AddProductAction).orderItem;
         const { productId, quantity } = orderItem;
-        storeAPI.dispatch({ type: UPDATE_SELECTION, productId, quantity } as 
-            UpdateProductSelectionAction );
+        storeAPI.dispatch({ type: UPDATE_RESERVATION, productId, reserved_quantity: quantity } as 
+            UpdateProductReservationAction );
+    } else if (action.type === SEND_ORDER_SUCCESS) {
+        storeAPI.dispatch({ type: REMOVE_ALL_RESERVATIONS });
     }
     return n;
 }

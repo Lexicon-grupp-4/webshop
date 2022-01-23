@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route } from 'react-router';
+import { Route, Switch } from 'react-router';
 import Layout from './components/Layout';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
@@ -12,13 +12,15 @@ import './custom.css'
 
 export default () => (
     <Layout>
+        <Switch>
         <Route exact path='/' component={ProductsPage} />
-        <Route exact path='/produkter/:cat1?' component={ProductsPage} />
         <Route exact path='/produkter/:cat1?/:cat2?' component={ProductsPage} />
+        <Route exact path='/produkter/:cat1?' component={ProductsPage} />
         <Route path='/login' component={LoginPage} />
         <Route path='/register' component={RegisterPage} />
         <Route path='/cart' component={ShoppingCartPage} />
         <Route path='/orders' component={OrdersPage} />
         <Route path='/aboutcontactpage' component={AboutContactPage} />
+        </Switch>
     </Layout>
 );

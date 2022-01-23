@@ -21,7 +21,8 @@ export interface Product extends ProductDto {
 export const REQUEST_PRODUCTS = 'prods/REQUEST_PRODUCTS';
 export const RECEIVE_PRODUCTS = 'prods/RECEIVE_PRODUCTS';
 export const SELECT_PRODUCTS_BY_CATEGORIES = 'prods/SELECT_PRODUCTS_BY_CATEGORIES';
-export const UPDATE_SELECTION = 'prods/UPDATE_SELECTION';
+export const UPDATE_RESERVATION = 'prods/UPDATE_RESERVATION';
+export const REMOVE_ALL_RESERVATIONS = 'prods/REMOVE_ALL_RESERVATIONS';
 
 interface RequestProductsAction {
     type: 'prods/REQUEST_PRODUCTS';
@@ -37,14 +38,19 @@ export interface SelectProductsByCategoriesAction {
     categories: number[];
 }
 
-interface UpdateProductSelectionAction {
-    type: 'prods/UPDATE_SELECTION';
+export interface UpdateProductReservationAction {
+    type: 'prods/UPDATE_RESERVATION';
     productId: number;
     reserved_quantity: number;
 }
 
+interface RemoveAllReservationsAction {
+    type: 'prods/REMOVE_ALL_RESERVATIONS';
+}
+
 type KnownAction = RequestProductsAction | ReceiveProductsAction 
-    | SelectProductsByCategoriesAction | UpdateProductSelectionAction;
+    | SelectProductsByCategoriesAction | UpdateProductReservationAction
+    | RemoveAllReservationsAction;
 
 // ACTION CREATORS
 
@@ -100,14 +106,15 @@ export const reducer: Reducer<ProductsState> = (state: ProductsState | undefined
                 products
             };
         }
-        case UPDATE_SELECTION: {
+        case UPDATE_RESERVATION: {
             // NOTE: too much logic here
             const prodIdx = state.products.findIndex(p => p.id === action.productId);
             if (prodIdx === -1) {
                 console.log('not found', prodIdx);
                 break;
             }
-            const changed: Product = { ...state.products[prodIdx], reserved_quantity: action.quantity };
+            const changed: Product = { ...state.products[prodIdx], reserved_quantity: action.reserved_quantity };
+            if (changed.reserved_quantity === 0) changed.reserved_quantity = undefined;
             const unchanged = state.products.filter(p => p.id !== action.productId);
             const prods = [...unchanged, changed] as Product[];
             prods.sort((a, b) => a.id - b.id); // expensive, a correct insert would be better
@@ -116,6 +123,13 @@ export const reducer: Reducer<ProductsState> = (state: ProductsState | undefined
                 products: prods
             };       
         }
+        case REMOVE_ALL_RESERVATIONS:
+            const products = [...state.products];
+            products.forEach(p => p.reserved_quantity = undefined);
+            return {
+                ...state,
+                products: products
+            };
     }
 
     return state;
