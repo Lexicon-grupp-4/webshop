@@ -9,23 +9,85 @@
 .produts-list-item {
     /* position: absolute; */
     cursor: pointer;
-}
-
-.produts-list-item:hover {
+    
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+/* .produts-list-item:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+} */
+
 .produts-list-item-buy {
-    right: 20px;
+    position: absolute;
+    right: 25px;
     bottom: 20px;
+}
+
+.produts-list-item-test {
+    transition: width 2s;
+    background-color: cornflowerblue !important;
 }
 
 .produts-list-item-inner {
     position: relative;
 }
 
+.produts-list-item-title {
+    font-family: TitilliumWeb, Arial, serif;
+    font-weight: 900;
+}
+
+.produts-list-item-title:first-letter {text-transform: uppercase}
+
 .produts-list-item-reserved-number {
-    position: absolute;
+    /* position: absolute;
     right: 20px;
-    bottom: 20px;
+    bottom: 20px; */
+}
+
+.produts-list-item-price-tag {
+    position: absolute;
+    background-color: coral;
+    padding: 0 10px;
+    left: 25px;
+    bottom: 25px;
+}
+
+.produts-list-item-price {
+    color: var(--darkGreen);
+    font-size: 120%;
+    font-family: TitilliumWeb, Arial, serif;
+    font-weight: 900;
+}
+
+.produts-list-item-categori {
+    background-color: var(--darkGreen);
+    color: white;
+    padding: 0 10px;
+    font-size: 80%;
+    font-family: TitilliumWeb, Arial, serif;
+    text-transform: uppercase;
+    z-index: 1050;
+}
+
+.produts-list-item-highlight {
+    position: absolute;
+    background-color: coral;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0.1;
+    height: 65px;
+    z-index: 0;
+}
+
+.produts-list-item-highlight-cart {
+    position: absolute;
+    background-color: var(--darkGreen);
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0.1;
+    height: 65px;
+    z-index: 0;
 }

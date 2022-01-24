@@ -15,6 +15,7 @@ export interface Product extends ProductDto {
     display: boolean;
     reserved_quantity?: number; // reserved for shopping cart
     sortIdx: number;
+    categoryName: string;
 }
 
 // ACTIONS
@@ -64,10 +65,11 @@ export const actionCreators = {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
         if (appState) {
+            const cats = getState().cate!.categories;
             fetch(`api/products?catId=${catId}&pageIdx=${pageIdx}`)
                 .then(response => response.json() as Promise<Product[]>)
                 .then((products: ProductDto[]) => {
-                    transformProducts(products as Product[]);
+                    transformProducts(products as Product[], cats);
                     dispatch({ type: RECEIVE_PRODUCTS, products: products as Product[], catId, pageIdx});
                 })
                 .catch(() => {

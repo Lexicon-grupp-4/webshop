@@ -16,3 +16,26 @@ code {
 .table-hover:hover {
     background-color: #dadaff;
 }
+
+:root {
+    --blue: #1e90ff;
+    --darkGreen: #006400;
+    --lightGrey1: #f0edee;
+}
+
+
+@font-face {
+    font-family: 'Mukta';
+    src: local('Mukta'), url(./fonts/Mukta-Bold.ttf) format('opentype');
+}
+
+@font-face {
+    font-family: 'TitilliumWeb';
+    src: local('TitilliumWeb'), url(./fonts/TitilliumWeb-Regular.ttf) format('opentype');
+}
+
+@font-face {
+    font-family: 'TitilliumWeb';
+    font-weight: 900;
+    src: local('TitilliumWeb'), url(./fonts/TitilliumWeb-Bold.ttf) format('opentype');
+}

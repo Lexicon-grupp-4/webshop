@@ -2,6 +2,7 @@ import { Order } from '../store/Orders';
 import { Category, categoryPaginationStart } from '../store/Categories';
 import { Product } from '../store/Products';
 import { prepairForUrl } from './string_functions';
+import { CategoryDto } from '../store/DomainClasses';
 
 export const timeOptions = {
     year: 'numeric', month: 'numeric', day: 'numeric',
@@ -27,12 +28,25 @@ export function transformCategories(cats: Category[]) {
     });
 }
 
-let sortIdx = 0;
+type CategoryIdToString = {
+    [key: number]: string;
+}
 
-export function transformProducts(prods: Product[]) {
+let sortIdx = 0;
+let catIdToCatName: CategoryIdToString | undefined; // lookup table
+
+function makeMapIdToCatName(cats: Category[]) {
+    catIdToCatName = {};
+    cats.forEach(c => catIdToCatName![c.id] = c.name);
+}
+
+
+export function transformProducts(prods: Product[], cats: Category[]) {
+    if (!catIdToCatName) makeMapIdToCatName(cats);
     prods.forEach(p => {
         p.display = true;
         p.sortIdx = sortIdx++;
+        p.categoryName = catIdToCatName![p.categoryId!];
     });
     prods.sort((a, b) => a.sortIdx - b.sortIdx);
     
