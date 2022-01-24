@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { Container } from 'reactstrap';
 import './NavMenu.css';
 
 
@@ -8,6 +9,7 @@ export default function AboutContactPage() {
 
     return (
         <div>
+            <Container>
             <h1>Kontakt & Info</h1>
 
             <ul className="list-inline">
@@ -53,8 +55,8 @@ export default function AboutContactPage() {
 
                 </ol>
 
-            
 
+            </Container>
         </div>
 
 
