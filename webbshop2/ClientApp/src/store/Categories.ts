@@ -19,13 +19,14 @@ export interface CategoryPagination {
     loadedPageIdx: number;
     isFullyLoaded: boolean;
 }
+export const categoryPaginationStart: CategoryPagination = {
+    loadedPageIdx: -1, isFullyLoaded: false
+}
 
 export interface Category extends CategoryDto {
     uriName: string;
     isSelected: boolean;
     pagination: CategoryPagination;
-    // loadedPageIdx: number;
-    // isFullyLoaded: boolean;
 }
 
 export const REQUEST_CATEGORIES = 'cate/REQUEST_CATEGORIES';
@@ -128,10 +129,9 @@ export const reducer: Reducer<CategoriesState> = (state: CategoriesState | undef
             const catIdx = categories.findIndex(c => c.id === action.catId);
             if (catIdx >= 0) {
                 categories[catIdx].pagination.loadedPageIdx += 1; // maybe risky
-                console.log(`stepping upp cat: ${categories[catIdx].id} to nextPageIdx ${categories[catIdx].pagination.loadedPageIdx}`);
                 if (action.products.length < apiSettings.pageSize) {
                     categories[catIdx].pagination = { ...categories[catIdx].pagination, isFullyLoaded: true};
-                    console.log('is fully loaded');
+                    // TODO: a fully loaded parent category should also set childern nodes to fully loaded
                 }
             }
             return {

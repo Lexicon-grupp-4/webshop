@@ -14,6 +14,7 @@ export interface ProductsState {
 export interface Product extends ProductDto {
     display: boolean;
     reserved_quantity?: number; // reserved for shopping cart
+    sortIdx: number;
 }
 
 // ACTIONS
@@ -68,6 +69,9 @@ export const actionCreators = {
                 .then((products: ProductDto[]) => {
                     transformProducts(products as Product[]);
                     dispatch({ type: RECEIVE_PRODUCTS, products: products as Product[], catId, pageIdx});
+                })
+                .catch(() => {
+                    console.error('failed to load products');
                 });
 
             dispatch({ type: REQUEST_PRODUCTS });
@@ -120,8 +124,8 @@ export const reducer: Reducer<ProductsState> = (state: ProductsState | undefined
             // NOTE: too much logic here
             const prodIdx = state.products.findIndex(p => p.id === action.productId);
             if (prodIdx === -1) {
-                console.log('not found', prodIdx);
-                break;
+                console.error('product not found', prodIdx);
+                return state;
             }
             const changed: Product = { ...state.products[prodIdx], reserved_quantity: action.reserved_quantity };
             if (changed.reserved_quantity === 0) changed.reserved_quantity = undefined;

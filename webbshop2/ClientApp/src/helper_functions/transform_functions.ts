@@ -1,5 +1,5 @@
 import { Order } from '../store/Orders';
-import { Category, CategoryPagination } from '../store/Categories';
+import { Category, categoryPaginationStart } from '../store/Categories';
 import { Product } from '../store/Products';
 import { prepairForUrl } from './string_functions';
 
@@ -23,13 +23,17 @@ export function transformCategories(cats: Category[]) {
     cats.forEach(c => {
         c.uriName = prepairForUrl(c.name);
         c.isSelected = true;
-        c.pagination = { loadedPageIdx: -1, isFullyLoaded: false};
+        c.pagination = { ...categoryPaginationStart };
     });
 }
 
+let sortIdx = 0;
+
 export function transformProducts(prods: Product[]) {
-    prods.sort((a, b) => a.id - b.id);
     prods.forEach(p => {
         p.display = true;
+        p.sortIdx = sortIdx++;
     });
+    prods.sort((a, b) => a.sortIdx - b.sortIdx);
+    
 }

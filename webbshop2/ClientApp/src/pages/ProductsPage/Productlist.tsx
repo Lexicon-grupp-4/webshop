@@ -1,17 +1,22 @@
 import React from 'react';
-import { Container, Card, CardTitle, CardSubtitle, CardBody, CardImg, Button, Badge } from 'reactstrap';
+import { Container, Card, CardTitle, CardSubtitle, CardBody, CardImg, Button, Badge, Spinner } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectProducts, Product, selectProductsIsLoading, actionCreators as productsActions } from '../../store/Products';
+import {
+    selectProducts, 
+    Product, 
+    selectProductsIsLoading,
+    actionCreators as productsActions } from '../../store/Products';
 import { selectSelectedCategoryId, selectCategoryPagination, CategoryPagination } from '../../store/Categories';
 import { ADD_PRODUCT, CartItem } from '../../store/ShoppingCart';
 import { Waypoint } from 'react-waypoint';
 import './ProductList.css';
 
 type ProductViewProps = {
-    product: Product
+    product: Product,
+    children?: React.ReactNode
 }
 
-function ProductView({ product }: ProductViewProps) {
+function ProductView({ product, children }: ProductViewProps) {
     const dispatch = useDispatch();
     const baseUrl = window.location.origin;
     const imglink = `${baseUrl}/images/${product.pictureUrl}`;
@@ -62,6 +67,7 @@ function ProductView({ product }: ProductViewProps) {
                             {reserved_quantity}
                         </Badge>
                     )}
+                    {children}
                 </CardBody>
             </Card>
         </div>
@@ -78,33 +84,50 @@ function TryLoadMore({ categoryId }: LoadMoreProps) {
     const pagination = useSelector(selectCategoryPagination) as CategoryPagination;
     const { isFullyLoaded, loadedPageIdx } = pagination;
     if (isLoading) {
-        console.log('is already loading products');
         return null;
     }
-    
     if (isFullyLoaded || loadedPageIdx < -1) return null;
 
-    console.log('rendering LoadMore');
     function loadMore() {
-        console.log(`manually loading page: ${pagination.loadedPageIdx} more from catId: ${categoryId}`);
         dispatch(productsActions.requestProducts(categoryId, pagination.loadedPageIdx + 1));
     }
 
     return (
-        <Waypoint onEnter={loadMore} ><div className="produts-list-item">hej</div></Waypoint>
+        <Waypoint onEnter={loadMore} />
+    );
+}
+
+function LoadingIndicator() {
+    return (
+        <div className="produts-list-item">
+            <Card>
+                <CardBody className="produts-list-item-inner text-center">
+                    <Spinner animation="border" role="status" /> 
+                </CardBody>
+            </Card>
+        </div>
     );
 }
 
 export default function ProductList() {
     const products = useSelector(selectProducts);
+    const isLoadingProducts = useSelector(selectProductsIsLoading);
     const selectedCategoryId = useSelector(selectSelectedCategoryId);
     const visbleProducts = products.filter(p => p.display);
-
+    // Adding <TryLoadMore /> to last product
+    const lastVisible = [visbleProducts.pop()] as Product[]; 
+    const visibleProducts = visbleProducts.map((p) => (<ProductView key={p.id} product={p} />));
+    const lastVisibleProduct = !!lastVisible[0] ? lastVisible.map((p:Product) => (
+        <ProductView key={p.id} product={p} >
+            <TryLoadMore categoryId={selectedCategoryId} />
+        </ProductView>
+    )): (<TryLoadMore categoryId={selectedCategoryId} />);
     return (
         <Container>
             <div className="produts-list-container">
-                {visbleProducts.map((p) => <ProductView key={p.id} product={p} />)}
-                <TryLoadMore categoryId={selectedCategoryId} />
+                {visibleProducts}
+                {lastVisibleProduct}
+                {isLoadingProducts && (<LoadingIndicator />)}
             </div>
         </Container>
     );

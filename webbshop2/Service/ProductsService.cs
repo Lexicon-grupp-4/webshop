@@ -20,6 +20,7 @@ namespace webbshop2.Service
     public class ProductsService: IProductsService
     {
         readonly ApplicationDbContext _context;
+        readonly int itemsPerLoad = 12; // TODO inject from settings
 
         public ProductsService(ApplicationDbContext context)
         {
@@ -37,7 +38,7 @@ namespace webbshop2.Service
                 .OrderBy(p => p.Id)
                 .Include(p => p.Category)
                 .Where(c => c.Category.Id == catId || c.Category.Parent.Id == catId)
-                .Skip(pageIdx * 10).Take(10)
+                .Skip(pageIdx * itemsPerLoad).Take(itemsPerLoad)
                 .ToListAsync();
 
             return products.ConvertAll(new Converter<Product, ProductDto>(MakeProductDto));
