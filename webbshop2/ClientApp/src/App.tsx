@@ -8,7 +8,7 @@ import OrdersPage from './pages/OrdesPage';
 import ProductsPage from './pages/ProductsPage';
 import AboutContactPage from './components/AboutContactPage';
 
-import './custom.css'
+import './custom.css';
 
 export default () => (
     <Layout>

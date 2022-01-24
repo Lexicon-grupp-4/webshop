@@ -11,7 +11,6 @@ import {
     LOGOUT
  } from './Auth';
 import { 
-    actionCreators as productsActions, 
     SELECT_PRODUCTS_BY_CATEGORIES,
     REMOVE_ALL_RESERVATIONS,
     UPDATE_RESERVATION,
@@ -48,7 +47,7 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
         // @ts-ignore
         storeAPI.dispatch(authActions.verifyAuthenticationToken());
         // @ts-ignore
-        storeAPI.dispatch(productsActions.requestProducts());
+        // storeAPI.dispatch(productsActions.requestProducts());
         // @ts-ignore
         storeAPI.dispatch(cateActions.requestCategories());
     } else if (action.type === CREDENTIALS_LOGIN_SUCCESS) {

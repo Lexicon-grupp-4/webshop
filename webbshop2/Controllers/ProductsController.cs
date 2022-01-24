@@ -6,6 +6,12 @@ using webbshop2.Service;
 
 namespace webbshop2.Controllers
 {
+    public class ProdsQuery
+    {
+        public int CatId { get; set; }
+        public int PageIdx { get; set; }
+    }
+
     [ApiController]
     [Route("api/[controller]")]
     public class ProductsController
@@ -18,9 +24,9 @@ namespace webbshop2.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProductDto>> Get()
+        public async Task<IEnumerable<ProductDto>> GetProducts([FromQuery] ProdsQuery prods)
         {
-            return await productsService.GetProducts();
+            return await productsService.GetProducts(prods.CatId, prods.PageIdx);
         }
 
         [HttpGet("{id}")]
