@@ -17,7 +17,7 @@ export default function ProductItem({ product, children }: ProductItemProps) {
     const dispatch = useDispatch();
     const baseUrl = window.location.origin;
     const imglink = `${baseUrl}/images/${product.pictureUrl}`;
-    const { name, reserved_quantity, price, categoryName } = product;
+    const { name, reserved_quantity, price, categoryName, localPrice } = product;
     const highlightClasses = classNames({
         'produts-list-item-highlight-cart': reserved_quantity,
         'produts-list-item-highlight': !reserved_quantity
@@ -83,7 +83,7 @@ export default function ProductItem({ product, children }: ProductItemProps) {
                     
                     {children}
                     <div className="produts-list-item-price-tag">
-                        <span className="produts-list-item-price">{price}</span> <span>SEK</span>
+                        <span className="produts-list-item-price">{localPrice}</span> <span>kr</span>
                     </div>
                 </CardBody>
             </Card>

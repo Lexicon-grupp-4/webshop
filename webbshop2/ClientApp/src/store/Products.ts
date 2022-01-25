@@ -16,6 +16,7 @@ export interface Product extends ProductDto {
     reserved_quantity?: number; // reserved for shopping cart
     sortIdx: number;
     categoryName: string;
+    localPrice: string;
 }
 
 // ACTIONS
