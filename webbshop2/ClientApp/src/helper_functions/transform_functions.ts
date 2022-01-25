@@ -27,12 +27,27 @@ export function transformCategories(cats: Category[]) {
     });
 }
 
-let sortIdx = 0;
+type NumericKeyToString = {
+    [key: number]: string;
+}
 
-export function transformProducts(prods: Product[]) {
+let sortIdx = 0;
+let catIdToCatName: NumericKeyToString | undefined; // lookup table
+
+function makeMapIdToCatName(cats: Category[]) {
+    catIdToCatName = {};
+    cats.forEach(c => catIdToCatName![c.id] = c.name);
+}
+
+
+export function transformProducts(prods: Product[], cats: Category[]) {
+    if (!catIdToCatName) makeMapIdToCatName(cats);
+    const formatter = new Intl.NumberFormat('sv-SE');
     prods.forEach(p => {
         p.display = true;
         p.sortIdx = sortIdx++;
+        p.categoryName = catIdToCatName![p.categoryId!];
+        p.localPrice = formatter.format(p.price*10);
     });
     prods.sort((a, b) => a.sortIdx - b.sortIdx);
     
