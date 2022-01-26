@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Nav, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import { selectCategorys, Category } from '../../store/Categories';
+import { CHANGE_CATEGORY_NAV, ChangeCategoryNavigationAction } from '../../store/AppLogicMiddleware'; 
 import classNames from 'classnames';
 import { withRouter, RouteComponentProps } from "react-router";
 import './CategoriesMenu.css';
@@ -19,11 +19,16 @@ type OrdersTableProps = {
 }
 
 function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab, matchCat1}: OrdersTableProps) {
+    const dispatch = useDispatch()
     const cssClasses = classNames({
         'categories-menu-subcat1-active': matchCat1,
         'categories-menu-cat-name': true,
         'categories-menu-subcat1-name': !matchCat1,
     });
+    function handleClick(tabIdx: number, cat1Id?: number, cat2Id?: number, cat1Name?: string, cat2Name?: string) {
+        setOpenTab(tabIdx);
+        dispatch({type: CHANGE_CATEGORY_NAV, cat1Id, cat2Id, cat1Name, cat2Name} as ChangeCategoryNavigationAction);
+    }
     return (
         <Dropdown isOpen={openTab === idx} toggle={() => {if(openTab !== 0) setOpenTab(0)}}>
             <DropdownToggle
@@ -32,10 +37,8 @@ function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab, matchCat1}: Order
                 onMouseEnter={() => setOpenTab(idx)}
             >
                 <NavLink 
-                    tag={Link}
-                    to={`/produkter/${cat.uriName}`}
                     className={cssClasses}
-                    onClick={() => setOpenTab(0)}
+                    onClick={() => handleClick(0, cat.id, undefined, cat.uriName)}
                 >
                     {cat.name}
                 </NavLink>
@@ -45,11 +48,9 @@ function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab, matchCat1}: Order
                     if (cat2.parentId !== cat.id) return null;
                     return (
                         <DropdownItem key={cat2.id}>
-                            <NavLink 
-                                tag={Link}
-                                to={`/produkter/${cat.uriName}/${cat2.uriName}`}
+                            <NavLink
                                 className="text-dark categories-menu-cat-name"
-                                onClick={() => setOpenTab(0)}
+                                onClick={() => handleClick(0, cat.id, cat2.id, cat.uriName, cat2.uriName)}
                             >
                                 {cat2.name}
                             </NavLink>

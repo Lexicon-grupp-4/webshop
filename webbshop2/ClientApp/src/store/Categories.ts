@@ -75,7 +75,10 @@ export const actionCreators = {
         const categories = appState.cate!.categories;
         const cat1 = categories.find(c => c.uriName === cat1Name);
         const cat2 = categories.find(c => c.uriName === cat2Name);
-        if (!!cat2) {
+        if (!cat1) {
+            const allCats = categories.map(c => c.id).filter(c => c !== 1);
+            dispatch({ type: SELECT_CATEGORIES, selectedCatId: 1, selectedSubCategories: allCats});
+        } else if (!!cat2) {
             if (cat2.id === appState.cate!.selectedCategoryId) return; // no change
             const selectedSubCategories = [cat2.id] as number[];
             dispatch({ type: SELECT_CATEGORIES, selectedCatId: cat2.id, selectedSubCategories });
