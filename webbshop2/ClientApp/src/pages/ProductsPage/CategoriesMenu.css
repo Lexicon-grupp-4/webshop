@@ -8,11 +8,12 @@
 }
 .categories-menu-subcat1-name:hover {
     color: var(--darkGreen);
+    cursor: pointer;
 }
 
 .categories-menu-subcat1-active {
     background-color: var(--darkGreen);
-    color: white;
+    color: white !important;
 }
 .categories-menu-subcat1-active:hover {
     color: white;
