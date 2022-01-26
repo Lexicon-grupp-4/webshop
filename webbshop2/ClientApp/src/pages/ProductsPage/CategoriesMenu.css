@@ -1,0 +1,19 @@
+.categories-menu-cat-name {
+    font-family: TitilliumWeb, Arial, serif;
+    text-transform: uppercase;
+}
+
+.categories-menu-subcat1-name {
+    color: var(--darkGreen);
+}
+.categories-menu-subcat1-name:hover {
+    color: var(--darkGreen);
+}
+
+.categories-menu-subcat1-active {
+    background-color: var(--darkGreen);
+    color: white;
+}
+.categories-menu-subcat1-active:hover {
+    color: white;
+}

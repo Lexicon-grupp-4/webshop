@@ -1,5 +1,5 @@
 /* Provide sufficient contrast against white background */
-a {
+/* a {
   color: #0366d6;
 }
 
@@ -11,16 +11,17 @@ code {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
-}
+} */
 
-.table-hover:hover {
+/* .table-hover:hover {
     background-color: #dadaff;
-}
+} */
 
 :root {
     --blue: #1e90ff;
     --darkGreen: #006400;
     --lightGrey1: #f0edee;
+    --dark: #222;
 }
 
 
