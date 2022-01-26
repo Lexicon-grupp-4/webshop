@@ -3,7 +3,9 @@ import { useSelector } from 'react-redux';
 import { Nav, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { selectCategorys, Category } from '../../store/Categories';
-// import colors from '../../config/colors';
+import classNames from 'classnames';
+import { withRouter, RouteComponentProps } from "react-router";
+import './CategoriesMenu.css';
 
 // TODO: 1) close menu 2) highlight selection
 
@@ -12,10 +14,16 @@ type OrdersTableProps = {
     cat: Category,
     idx: number,
     setOpenTab: (id: number) => void,
-    openTab: number
+    openTab: number,
+    matchCat1: boolean
 }
 
-function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab}: OrdersTableProps) {
+function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab, matchCat1}: OrdersTableProps) {
+    const cssClasses = classNames({
+        'categories-menu-subcat1-active': matchCat1,
+        'categories-menu-cat-name': true,
+        'categories-menu-subcat1-name': !matchCat1,
+    });
     return (
         <Dropdown isOpen={openTab === idx} toggle={() => {if(openTab !== 0) setOpenTab(0)}}>
             <DropdownToggle
@@ -26,7 +34,7 @@ function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab}: OrdersTableProps
                 <NavLink 
                     tag={Link}
                     to={`/produkter/${cat.uriName}`}
-                    className="text-dark"
+                    className={cssClasses}
                     onClick={() => setOpenTab(0)}
                 >
                     {cat.name}
@@ -40,7 +48,7 @@ function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab}: OrdersTableProps
                             <NavLink 
                                 tag={Link}
                                 to={`/produkter/${cat.uriName}/${cat2.uriName}`}
-                                className="text-dark"
+                                className="text-dark categories-menu-cat-name"
                                 onClick={() => setOpenTab(0)}
                             >
                                 {cat2.name}
@@ -53,19 +61,24 @@ function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab}: OrdersTableProps
     );
 }
 
-export default function CategoriesMenu() {
+type TParams =  { cat1: string, cat2: string};
+
+export function CategoriesMenu({ match }: RouteComponentProps<TParams> ) {
     const cats = useSelector(selectCategorys);
     const [openTab, setOpenTab] = useState(0);
     return (
         <Nav className={"nav-fill"}>
             {cats.map((cat:Category, idx) => {
+                const matchCat1 = match.params.cat1 === cat.uriName;
+                // const matchCat2 = match.params.cat2 === cat.uriName;
                 if (cat.parentId !== 1) return null;
                 return (
                     <NavItem key={cat.id} className={"table-hover"} >
                         <SubCategoryMenu 
                             cats={cats}
                             cat={cat}
-                            idx={idx} 
+                            idx={idx}
+                            matchCat1={matchCat1}
                             setOpenTab={setOpenTab} 
                             openTab={openTab} 
                         />
@@ -75,3 +88,5 @@ export default function CategoriesMenu() {
         </Nav>
     );
 }
+
+export default withRouter(CategoriesMenu);
