@@ -1,14 +1,16 @@
 .categories-menu-cat-name {
     font-family: TitilliumWeb, Arial, serif;
     text-transform: uppercase;
+    cursor: pointer;
 }
 
 .categories-menu-subcat1-name {
     color: var(--darkGreen);
+    cursor: pointer;
 }
+
 .categories-menu-subcat1-name:hover {
     color: var(--darkGreen);
-    cursor: pointer;
 }
 
 .categories-menu-subcat1-active {

@@ -26,7 +26,6 @@ function TryLoadMore({ categoryId }: LoadMoreProps) {
     if (isFullyLoaded || loadedPageIdx < -1) return null;
 
     function loadMore() {
-        console.log('trying to load more from Cat', categoryId)
         dispatch(productsActions.requestProducts(categoryId, pagination.loadedPageIdx + 1));
     }
 

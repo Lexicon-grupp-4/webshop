@@ -48,6 +48,8 @@ export interface ChangeCategoryNavigationAction {
     type: 'app/CHANGE_CATEGORY_NAV';
     cat1Id: number; // parent
     cat2Id: number; // subcategory1
+    cat1Name: string; // parent
+    cat2Name: string; // subcategory1
 }
 
 // To keep subsystems in app separated, listen for an action and translate it to notification 
@@ -58,8 +60,6 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
     if (action.type === APP_START) {
         // @ts-ignore
         storeAPI.dispatch(authActions.verifyAuthenticationToken());
-        // @ts-ignore
-        // storeAPI.dispatch(productsActions.requestProducts());
         // @ts-ignore
         storeAPI.dispatch(cateActions.requestCategories());
     } else if (action.type === CREDENTIALS_LOGIN_SUCCESS) {
@@ -87,7 +87,6 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
         const noCatPathMatch = matchPath(act.payload.location.pathname, {
             path: "/", exact: true
         });
-        console.log('LOCATION_CHANGE', catPathMatch, noCatPathMatch)
         if (!!catPathMatch) {
             // @ts-ignore
             storeAPI.dispatch(cateActions.selectCategories(catPathMatch.params.cat1, catPathMatch.params.cat2));
@@ -108,7 +107,6 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
     } else if (action.type === SEND_ORDER_SUCCESS) {
         storeAPI.dispatch({ type: REMOVE_ALL_RESERVATIONS });
     } else if (action.type === CHANGE_CATEGORY_NAV) {
-        console.log('CHANGE_CATEGORY_NAV', action);
         const categories = storeAPI.getState().cate!.categories;
         const changeCategorAction = (action as ChangeCategoryNavigationAction);
         const {cat1Id, cat2Id} = changeCategorAction;
@@ -116,12 +114,14 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
         const deepstCategory = categories.find(c => c.id === deepestCatId);
         if (deepstCategory) {
             if (deepstCategory.pagination.loadedPageIdx === -1 ){
-                console.log("we need to load cats before page change");
                 // @ts-ignore
                 storeAPI.dispatch(prodActions.requestProducts(deepstCategory.id, 0));
             } else {
-                console.log("page change", deepestCatId);
-                storeAPI.dispatch(push(`/produkter/${deepstCategory.uriName}`));
+                if (changeCategorAction.cat2Name) {
+                    storeAPI.dispatch(push(`/produkter/${changeCategorAction.cat1Name}/${changeCategorAction.cat2Name}`));
+                } else {
+                    storeAPI.dispatch(push(`/produkter/${changeCategorAction.cat1Name}`));
+                }
             }
         }
         
@@ -129,17 +129,13 @@ const AppLogicMiddleware: LoaderMiddleware = storeAPI => next => action => {
         const receiveProductsAction = (action as ReceiveProductsAction);
         const categories = storeAPI.getState().cate!.categories;
         const deepstCategory = categories.find(c => c.id === receiveProductsAction.catId);
-        console.log('RECEIVE_PRODUCTS', deepstCategory);
         if (deepstCategory) {
-            if (deepstCategory.parentId == 0) {
-                console.log('RECEIVE_PRODUCTS under root')
+            if (deepstCategory.parentId === 0) {
             } else if (deepstCategory.parentId === 1) {
                 storeAPI.dispatch(push(`/produkter/${deepstCategory.uriName}`));
             } else {
                 const parentCat = categories.find(c => c.id === deepstCategory.parentId);
                 if (!parentCat) console.error('cant find parent to', deepstCategory);
-                console.log('parent cat', parentCat)
-                console.log(`/produkter/${parentCat!.uriName}/${deepstCategory.uriName}`)
                 storeAPI.dispatch(push(`/produkter/${parentCat!.uriName}/${deepstCategory.uriName}`));
             }
         } 

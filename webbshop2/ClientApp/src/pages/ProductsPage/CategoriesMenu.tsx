@@ -25,10 +25,9 @@ function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab, matchCat1}: Order
         'categories-menu-cat-name': true,
         'categories-menu-subcat1-name': !matchCat1,
     });
-    function handleClick(tabIdx: number, cat1Id?: number, cat2Id?: number) {
+    function handleClick(tabIdx: number, cat1Id?: number, cat2Id?: number, cat1Name?: string, cat2Name?: string) {
         setOpenTab(tabIdx);
-        dispatch({type: CHANGE_CATEGORY_NAV, cat1Id, cat2Id} as ChangeCategoryNavigationAction);
-        // console.log('CLICKKKKK')
+        dispatch({type: CHANGE_CATEGORY_NAV, cat1Id, cat2Id, cat1Name, cat2Name} as ChangeCategoryNavigationAction);
     }
     return (
         <Dropdown isOpen={openTab === idx} toggle={() => {if(openTab !== 0) setOpenTab(0)}}>
@@ -38,10 +37,8 @@ function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab, matchCat1}: Order
                 onMouseEnter={() => setOpenTab(idx)}
             >
                 <NavLink 
-                    // tag={Link}
-                    // to={`/produkter/${cat.uriName}`}
                     className={cssClasses}
-                    onClick={() => handleClick(0, cat.id)}
+                    onClick={() => handleClick(0, cat.id, undefined, cat.uriName)}
                 >
                     {cat.name}
                 </NavLink>
@@ -51,11 +48,9 @@ function SubCategoryMenu({cats, cat, idx, openTab, setOpenTab, matchCat1}: Order
                     if (cat2.parentId !== cat.id) return null;
                     return (
                         <DropdownItem key={cat2.id}>
-                            <NavLink 
-                                // tag={Link}
-                                // to={`/produkter/${cat.uriName}/${cat2.uriName}`}
+                            <NavLink
                                 className="text-dark categories-menu-cat-name"
-                                onClick={() => handleClick(0, cat.id, cat2.id)}
+                                onClick={() => handleClick(0, cat.id, cat2.id, cat.uriName, cat2.uriName)}
                             >
                                 {cat2.name}
                             </NavLink>

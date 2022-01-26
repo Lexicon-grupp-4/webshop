@@ -76,7 +76,8 @@ export const actionCreators = {
         const cat1 = categories.find(c => c.uriName === cat1Name);
         const cat2 = categories.find(c => c.uriName === cat2Name);
         if (!cat1) {
-            dispatch({ type: SELECT_CATEGORIES, selectedCatId: 1, selectedSubCategories: []});
+            const allCats = categories.map(c => c.id).filter(c => c !== 1);
+            dispatch({ type: SELECT_CATEGORIES, selectedCatId: 1, selectedSubCategories: allCats});
         } else if (!!cat2) {
             if (cat2.id === appState.cate!.selectedCategoryId) return; // no change
             const selectedSubCategories = [cat2.id] as number[];
@@ -89,18 +90,6 @@ export const actionCreators = {
                 if (c.parentId === cat1.id) selectedSubCategories.push(c.id);
             })
             dispatch({ type: SELECT_CATEGORIES, selectedCatId: cat1.id, selectedSubCategories });
-        }
-    },
-    changeCategoryNav: (cat1Id: number, cat2Id?: number): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        const appState = getState();
-        const categories = appState.cate!.categories;
-        const deepestCatId = cat2Id? cat2Id : cat1Id;
-        const deepst = categories.find(c => c.id === deepestCatId);
-        if (!deepst) {
-            console.log("we need to load cats before page change");
-        } else {
-            console.log("page change");
-
         }
     }
 }
