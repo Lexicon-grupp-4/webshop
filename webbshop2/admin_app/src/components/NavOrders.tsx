@@ -1,9 +1,6 @@
 import React from 'react';
 import { NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
-// import { selectOrders } from '../store/Orders';
-// import { selectIsLoggedIn } from '../store/Auth';
 
 export default function NavOrders() {
     // const orders = useSelector(selectOrders);

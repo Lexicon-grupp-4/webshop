@@ -1,8 +1,7 @@
 import { Middleware } from 'redux';
 import { AppState } from './reducers';
-import { fetchProductsAsync } from './products.slice';
+// import { fetchProductsAsync } from './products.slice';
 import { fetchCategriesAsync } from './categories.slice';
-// import { AsyncAction } from './types';
 
 export type AppMiddleware = Middleware<{}, AppState>
 export const APP_INIT = 'app/INIT'
@@ -11,7 +10,7 @@ const AppLogicMiddleware: AppMiddleware = storeAPI => next => action => {
     const n = next(action);
     if (action.type === APP_INIT) {
         // @ts-ignore
-        storeAPI.dispatch(fetchProductsAsync());
+        // storeAPI.dispatch(fetchProductsAsync());
         // @ts-ignore
         storeAPI.dispatch(fetchCategriesAsync());
     }

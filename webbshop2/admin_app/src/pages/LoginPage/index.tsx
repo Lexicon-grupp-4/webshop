@@ -2,10 +2,10 @@ import {
     Container
 } from 'react-bootstrap';
 
-export default function OrdersPage() {
+export default function LoginPage() {
     return (
         <Container>
-            <h1>Order Sida</h1>
+            <h1>Login Sida</h1>
         </Container>
     );
 }
