@@ -9,7 +9,7 @@ namespace webbshop2.Dtos
     public class RegisterDto
     {
         [MaxLength(50)]
-        public string Name { get; set; }
+        public string UserName { get; set; }
 
         [MaxLength(255)]
         public string Email { get; set; }
