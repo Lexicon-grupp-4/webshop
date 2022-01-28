@@ -31,7 +31,7 @@ namespace webbshop2.Controllers
             catch (ServiceException) {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
-            return Created("successfully", new { Name = dto.Name });
+            return Created("successfully", new { Name = dto.UserName });
         }
 
         [HttpPost("login")]

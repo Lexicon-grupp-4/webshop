@@ -24,16 +24,16 @@ namespace webbshop2.Service
 
         public async Task<ApplicationUser> Create(RegisterDto model)
         {
-            ApplicationUser userExists = await userManager.FindByNameAsync(model.Name);
+            ApplicationUser userExists = await userManager.FindByNameAsync(model.UserName);
             if (userExists != null)
             {
-                throw new ServiceException(String.Format("user {0} already existing ", model.Name));
+                throw new ServiceException(String.Format("user {0} already existing ", model.UserName));
             }
             ApplicationUser user = new ApplicationUser()
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Email
+                UserName = model.UserName
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
