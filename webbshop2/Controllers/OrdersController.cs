@@ -25,10 +25,17 @@ namespace webbshop2.Controllers
             return Ok(order);
         }
 
+        [HttpGet("personal-orders")]
+        public async Task<IActionResult> GetPersonalOrders()
+        {
+            var ordersDto = await orderService.GetOrdersByUser();
+            return Ok(ordersDto);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var ordersDto = await orderService.GetOrdersByUser();
+            var ordersDto = await orderService.GetOrders();
             return Ok(ordersDto);
         }
     }

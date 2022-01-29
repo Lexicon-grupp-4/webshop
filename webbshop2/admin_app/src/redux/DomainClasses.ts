@@ -29,5 +29,22 @@ export interface CategoryDto {
     parentId: number;
 }
 
+export enum Role {
+    User,
+    Admin
+}
+
+export interface User {
+    id: number;
+    name: number;
+    email: string;
+    role: Role;
+}
+
+export interface PasswordLoginResponseDto {
+    jwt: string,
+    user: User
+}
+
 // maybe it's just identical to product
 export interface CartItem extends ProductDto {}

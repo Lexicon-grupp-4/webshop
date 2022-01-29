@@ -38,7 +38,7 @@ export const actionCreators = {
         const appState = getState();
         const token = getToken();
         if (appState) {
-            fetch(`api/orders`, {
+            fetch(`/api/orders/personal-orders`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`

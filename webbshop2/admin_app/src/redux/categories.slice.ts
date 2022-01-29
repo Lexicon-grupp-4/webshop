@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, /*PayloadAction*/ } from '@reduxjs/toolkit';
 import { RootState, /*AppThunk*/ } from './store';
 import { CategoryDto } from './DomainClasses';
-import { fetchCategories } from './categories.api'
+import { fetchCategories } from './categories.api';
 
 export interface CategoriesState {
     isLoading: boolean;
