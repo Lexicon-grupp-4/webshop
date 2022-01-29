@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from 'react-bulma-components';
 import { useAppDispatch } from '../../redux/hooks';
+import { fetchOrdersAsync } from '../../redux/orders.slice';
 import {
     receive,
-    fetchCategriesAsync
 } from '../../redux/categories.slice';
 
 export default function Testpage() {
@@ -18,7 +18,7 @@ export default function Testpage() {
             </Button>
             <button
                 aria-label="Decrement value"
-                onClick={() => dispatch(fetchCategriesAsync())}
+                onClick={() => dispatch(fetchOrdersAsync())}
             > 
                     cats async
             </button>

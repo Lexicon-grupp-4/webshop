@@ -15,6 +15,7 @@ namespace webbshop2.Service
     {
         Task<OrderDto> Create(OrderDto order);
         Task<List<OrderDto>> GetOrdersByUser(); // maybe add status filter
+        Task<List<OrderDto>> GetOrders(int pageIdx = 0, OrderStatus filterOrderStatus = OrderStatus.Processing);
     }
 
     public class OrderService : IOrderService
@@ -22,6 +23,7 @@ namespace webbshop2.Service
         readonly ApplicationDbContext _context;
         readonly IProductsService productsService;
         readonly IAuthenticationService authService;
+        readonly int ordersPerLoad = 12; // TODO inject from settings
 
         public OrderService(ApplicationDbContext context, 
             IProductsService productsService,
@@ -58,7 +60,7 @@ namespace webbshop2.Service
         }
 
         // maybe move
-        public OrderDto MakeOrderDto(Order order)
+        static public OrderDto MakeOrderDto(Order order)
         {
             OrderDto orderDto = new OrderDto()
             {
@@ -106,12 +108,20 @@ namespace webbshop2.Service
                 .ThenInclude(oi => oi.Product)
                 .ToListAsync();
 
-            List<OrderDto> ordersDto = new List<OrderDto>();
-            foreach(var order in selectedOrders)
-            {
-                ordersDto.Add(MakeOrderDto(order));
-            }
-            return ordersDto;
+            return selectedOrders.ConvertAll(new Converter<Order, OrderDto>(MakeOrderDto));
+        }
+
+        public async Task<List<OrderDto>> GetOrders(int pageIdx = 0, OrderStatus filterOrderStatus = OrderStatus.Processing)
+        {
+            var selectedOrders = await _context.Orders
+                .Where(o => o.Status == filterOrderStatus)
+                .OrderBy(o => o.Date)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .Skip(pageIdx * ordersPerLoad).Take(ordersPerLoad)
+                .ToListAsync();
+
+            return selectedOrders.ConvertAll(new Converter<Order, OrderDto>(MakeOrderDto));
         }
     }
 }
