@@ -7,8 +7,8 @@ namespace webbshop2.Models
 {
     public enum OrderStatus
     {
-        Processing,
-        InTransit,
+        Processing, // Order has been sent from customer
+        InTransit, // Order has been assembled (and probably sent)
         Cancelled,
         Delivered,
         Problem
