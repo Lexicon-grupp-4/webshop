@@ -1,9 +1,10 @@
 import { useSelector} from 'react-redux';
+import { useAppDispatch } from '../../redux/hooks';
 import { 
-    ListGroup, Table, Container, Row, Col, Button
+    ListGroup, Table, Container, Row, Col, Button, ButtonGroup 
 } from 'react-bootstrap';
-import { selectOrders, Order } from '../../redux/orders.slice';
-import { OrderItemDto } from '../../redux/DomainClasses';
+import { selectOrders, Order, patchOrderAsync } from '../../redux/orders.slice';
+import { OrderItemDto, OrderStatus } from '../../redux/DomainClasses';
 
 type OrderItemProps = {
     item: OrderItemDto,
@@ -24,6 +25,16 @@ type OrderProps = {
 }
 
 function OrderViewer({ order }: OrderProps) {
+    const dispatch = useAppDispatch();
+    function approveOrder(order: Order) {
+        // will try make the backend to take this order to status: Delivered
+        const changed = {...order, status: OrderStatus.InTransit};
+        dispatch(patchOrderAsync(changed));
+    }
+    function cancelOrder(order: Order) {
+        order.status = OrderStatus.Cancelled;
+        dispatch(patchOrderAsync(order));
+    }
     return (
         <ListGroup.Item>
             <Container>
@@ -46,7 +57,20 @@ function OrderViewer({ order }: OrderProps) {
                         Order nb: {order.id} <br />
                         Datum: {order.localTime} <br />
                         Status: {order.status} <br />
-                        <Button >Godkänn</Button>
+
+                        { order.status! === OrderStatus.Processing.toString() && (
+                            <ButtonGroup aria-label="Basic example">
+                                <Button onClick={() => approveOrder(order)}>Godkänn</Button>
+                                <Button onClick={() => cancelOrder(order)}>Avbryt</Button>
+                            </ButtonGroup>
+                        )} 
+                        
+                        { order.status! === OrderStatus.InTransit.toString() && (
+                            <ButtonGroup aria-label="Basic example">
+                                <Button>Avbryt</Button>
+                            </ButtonGroup>
+                        )}
+                        
                     </Col>
                 </Row>
             </Container>

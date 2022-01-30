@@ -8,11 +8,19 @@ export interface OrderItemDto {
     name?: string;
 }
 
+export enum OrderStatus {
+    Processing = 'Processing',
+    InTransit = 'InTransit',
+    Cancelled = 'Cancelled',
+    Delivered = 'Delivered',
+    Problem = 'Problem'
+}
+
 export interface OrderDto {
     id?: number;
     items: OrderItemDto[];
     date?: string; // string for now
-    status?: string; // string for now, maybe enum
+    status?: OrderStatus; // string for now, maybe enum
 }
 
 export interface ProductDto {

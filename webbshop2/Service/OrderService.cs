@@ -16,6 +16,8 @@ namespace webbshop2.Service
         Task<OrderDto> Create(OrderDto order);
         Task<List<OrderDto>> GetOrdersByUser(); // maybe add status filter
         Task<List<OrderDto>> GetOrders(int pageIdx = 0, OrderStatus filterOrderStatus = OrderStatus.Processing);
+        Task<Order> GetOrderById(int id);
+        Task<OrderDto> UpdateOrder(OrderDto orderDto);
     }
 
     public class OrderService : IOrderService
@@ -88,13 +90,59 @@ namespace webbshop2.Service
          * 1: first validate order
          * 2: start transaction
          * 3: store order (store order and orderitems)
-         * 4: update inventory
          **/
         public async Task<OrderDto> Create(OrderDto orderDto)
         {
             // TODO make sure orders are validated
             ApplicationUser customer = await authService.GetUser();
             Order order = await Store(orderDto, customer);
+            return MakeOrderDto(order);
+        }
+
+        public async Task<Order> GetOrderById(int id)
+        {
+            var order = await _context.Orders
+                .Where(o => o.Id == id)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .ToListAsync();
+
+            return order.First();
+        }
+
+        /**
+         * Check if all items is in inventory.
+         * 
+         */
+        private void ExecuteSellOrder(Order order)
+        {
+            order.Status = OrderStatus.InTransit; // TODO keep working
+        }
+
+        private void CanselOrder(Order order)
+        {
+            order.Status = OrderStatus.Cancelled;
+        }
+
+        /**
+         * Trying to take the order from orderDto from:
+         * order.Status to orderDto.Status
+         */
+        public async Task<OrderDto> UpdateOrder(OrderDto orderDto)
+        {
+            Order order = await GetOrderById(orderDto.Id);
+
+            if (orderDto.Status == OrderStatus.InTransit.ToString())
+            {
+                ExecuteSellOrder(order);
+            } 
+            else if (orderDto.Status == OrderStatus.Cancelled.ToString())
+            {
+                CanselOrder(order);
+            }
+
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
             return MakeOrderDto(order);
         }
 
@@ -114,7 +162,7 @@ namespace webbshop2.Service
         public async Task<List<OrderDto>> GetOrders(int pageIdx = 0, OrderStatus filterOrderStatus = OrderStatus.Processing)
         {
             var selectedOrders = await _context.Orders
-                .Where(o => o.Status == filterOrderStatus)
+                //.Where(o => o.Status == filterOrderStatus)
                 .OrderBy(o => o.Date)
                 .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)

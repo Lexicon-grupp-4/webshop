@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice, /*PayloadAction*/ } from '@reduxjs/toolkit';
 import { RootState, /*AppThunk*/ } from './store';
 import { OrderDto } from './DomainClasses';
-import { fetchOrders } from './orders.api';
+import { fetchOrders, patchOrder } from './orders.api';
+import { transformOrder } from './orders.api';
 
 export interface OrdersState {
     isLoading: boolean;
@@ -22,7 +23,15 @@ export const fetchOrdersAsync = createAsyncThunk(
     'orders/fetchAll',
     async () => {
         const response = await fetchOrders();
-        return response.categories;
+        return response.orders;
+    }
+);
+
+export const patchOrderAsync = createAsyncThunk(
+    'orders/patchOrder',
+    async (order: OrderDto) => {
+        const response = await patchOrder(order);
+        return response.order;
     }
 );
 
@@ -37,6 +46,10 @@ export const ordersSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchOrdersAsync.fulfilled, (state, action) => {
             state.orders = [...action.payload];
+        })
+        builder.addCase(patchOrderAsync.fulfilled, (state, action) => {
+            const idx = state.orders.findIndex(o => o.id === action.payload.id);
+            if (idx !== -1) state.orders[idx] = transformOrder(action.payload);
         })
     }
 });

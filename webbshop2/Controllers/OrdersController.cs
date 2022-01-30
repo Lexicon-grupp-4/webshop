@@ -32,11 +32,21 @@ namespace webbshop2.Controllers
             return Ok(ordersDto);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> GetOrdersByFilter()
         {
+            // TODO get filer settings from query-params
             var ordersDto = await orderService.GetOrders();
             return Ok(ordersDto);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPatch]
+        public async Task<IActionResult> UpdateOrder(OrderDto order)
+        {
+            var orderDto = await orderService.UpdateOrder(order);
+            return Ok(orderDto);
         }
     }
 }
