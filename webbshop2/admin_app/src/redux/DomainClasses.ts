@@ -24,11 +24,12 @@ export interface OrderDto {
 }
 
 export interface ProductDto {
-    id: number;
+    id?: number;
     name: string;
     price: number;
     quantity: number;
     categoryId?: number;
+    description: string;
 }
 
 export interface CategoryDto {

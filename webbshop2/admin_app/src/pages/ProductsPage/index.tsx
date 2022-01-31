@@ -8,13 +8,14 @@ export default function ProductsPage() {
                 <Col>
                     <Container>
                         <br />
-                        <h1>Skapa Produkt</h1>
+                        <h1>Skapa</h1>
                         <br />
                         <ProductForm />
                     </Container>
                 </Col>
                 <Col>
-                    <h1>Produkt Sida</h1>
+                    <br />
+                    <h1>Sök</h1>
                 </Col>
             </Row>
         </Container>

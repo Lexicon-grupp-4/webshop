@@ -12,6 +12,7 @@ namespace webbshop2.Service
     {
         Task<List<CategoryDto>> GetAll();
         Task<Category> Create(Category category);
+        Task<Category> FindCategoryById(int id);
     }
     public class CategoriesService : ICategoriesService
     {
@@ -48,6 +49,13 @@ namespace webbshop2.Service
         {
             var catList = await _context.Categories.ToListAsync(); // .Include(o => o.Parent)
             return catList.ConvertAll(new Converter<Category, CategoryDto>(MakeCategoryDto));
+        }
+
+        public async Task<Category> FindCategoryById(int id)
+        {
+            var cat = await _context.Categories.FindAsync(id);
+            // throw if not found
+            return cat;
         }
     }
 }

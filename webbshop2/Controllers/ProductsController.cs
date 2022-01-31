@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using webbshop2.Dtos;
@@ -27,6 +28,13 @@ namespace webbshop2.Controllers
         public async Task<IEnumerable<ProductDto>> GetProducts([FromQuery] ProdsQuery prods)
         {
             return await productsService.GetProducts(prods.CatId, prods.PageIdx);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ProductDto> CreateProducts(ProductDto product)
+        {
+            return await productsService.CreateProduct(product);
         }
 
         [HttpGet("{id}")]
