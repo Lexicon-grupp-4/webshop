@@ -12,6 +12,7 @@ export interface CategoriesState {
 export interface Category extends CategoryDto {
     uriName: string;
     isSelected: boolean;
+    hierarchicalName: string;
 }
 
 const rootCategoryId = 1;

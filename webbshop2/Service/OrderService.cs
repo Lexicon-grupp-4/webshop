@@ -25,7 +25,7 @@ namespace webbshop2.Service
         readonly ApplicationDbContext _context;
         readonly IProductsService productsService;
         readonly IAuthenticationService authService;
-        readonly int ordersPerLoad = 12; // TODO inject from settings
+        readonly int ordersPerLoad = 50; // TODO inject from settings
 
         public OrderService(ApplicationDbContext context, 
             IProductsService productsService,

@@ -15,16 +15,20 @@ namespace webbshop2.Service
         Task<List<ProductDto>> GetProducts(int catId, int pageIdx);
         Task<Product> GetProduct(int id);
         Task<ProductDto> GetProductDto(int id);
+        Task<ProductDto> CreateProduct(ProductDto productDto);
     }
 
     public class ProductsService: IProductsService
     {
         readonly ApplicationDbContext _context;
+        readonly ICategoriesService categoriesService;
         readonly int itemsPerLoad = 12; // TODO inject from settings
+        readonly string tempDefaultImage = "package.jpg"; 
 
-        public ProductsService(ApplicationDbContext context)
+        public ProductsService(ApplicationDbContext context, ICategoriesService categoriesService)
         {
             _context = context;
+            this.categoriesService = categoriesService;
         }
 
         public async Task<Product> GetProduct(int id)
@@ -68,6 +72,22 @@ namespace webbshop2.Service
         {
             var products = await _context.Products.Include(p => p.Category).ToListAsync();
             return products.ConvertAll(new Converter<Product, ProductDto>(MakeProductDto));
+        }
+
+        public async Task<ProductDto> CreateProduct(ProductDto productDto)
+        {
+            var category = await categoriesService.FindCategoryById(productDto.CategoryId);
+            var prod = new Product()
+            {
+                Name = productDto.Name,
+                Category = category,
+                Price = productDto.Price,
+                Description = productDto.Description,
+                PictureUrl = tempDefaultImage
+            };
+            _context.Products.Add(prod);
+            await _context.SaveChangesAsync();
+            return MakeProductDto(prod);
         }
     }
 }
