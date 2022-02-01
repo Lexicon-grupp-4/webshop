@@ -56,7 +56,6 @@ class SearchProducts extends React.Component {
 
     onSuggestionSelected(event, { suggestion, suggestionValue, index, method }){
         event.preventDefault();
-        console.log('ping... ', suggestion);
         this.props.setActiveProduct(suggestion); // receive test
     }
 

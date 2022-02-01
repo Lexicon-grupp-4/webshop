@@ -23,7 +23,6 @@ function transformCategories(cats: CategoryDto[]) {
         d.uriName = prepairForUrl(c.name);
         setHierarchicalName(d, cats);
         d.isSelected = true;
-        console.log(d.hierarchicalName);
         return d;
     })
     return categories;

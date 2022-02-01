@@ -7,7 +7,7 @@ import { transformProducts } from './products.api';
 export interface ProductsState {
     isLoading: boolean;
     activeProduct?: Product;
-    products: Product[]; // no used atm
+    products: Product[]; // no used atm. maybe we will buffer some products
 }
 
 export interface Product extends ProductDto {
@@ -36,9 +36,11 @@ export const productsSlice = createSlice({
                 transformProducts(prods);
                 state.activeProduct = prods[0];
             } else {
-                console.log('empty payload')
+                console.log('empty payload');
             }
-            
+        },
+        clearActiveProduct: (state) => {
+            state.activeProduct = undefined;
         }
     },
     extraReducers: (builder) => {
@@ -48,8 +50,9 @@ export const productsSlice = createSlice({
     }
 });
 
-export const { setActiveProduct } = productsSlice.actions;
+export const { setActiveProduct, clearActiveProduct } = productsSlice.actions;
 
 export const selectProducts = (state: RootState) => state.products.products;
+export const selectActiveProduct = (state: RootState) => state.products.activeProduct;
 
 export default productsSlice.reducer;
