@@ -39,8 +39,6 @@ export default function ProductForm() {
             })
             .then((resp: ProductDto) => {
                 reset();
-                // dispatch(loginSuccess(loginResp.user));
-                // setToken(loginResp.jwt);
             })
             .catch(() => {
                 // removeToken();

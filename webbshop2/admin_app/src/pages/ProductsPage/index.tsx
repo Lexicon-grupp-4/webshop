@@ -1,7 +1,11 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import ProductForm from './ProductForm';
+import SearchProducts from './SearchProducts';
 
 export default function ProductsPage() {
+    function test(){
+        console.log('running test');
+    }
     return (
         <Container>
             <Row>
@@ -16,6 +20,8 @@ export default function ProductsPage() {
                 <Col>
                     <br />
                     <h1>Sök</h1>
+                    <br />
+                    <SearchProducts test={test} />
                 </Col>
             </Row>
         </Container>

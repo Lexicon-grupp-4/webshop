@@ -12,7 +12,7 @@ namespace webbshop2.Service
     public interface IProductsService
     {
         Task<List<ProductDto>> GetProducts();
-        Task<List<ProductDto>> GetProducts(int catId, int pageIdx);
+        Task<List<ProductDto>> GetProducts(int catId, int pageIdx, string search);
         Task<Product> GetProduct(int id);
         Task<ProductDto> GetProductDto(int id);
         Task<ProductDto> CreateProduct(ProductDto productDto);
@@ -36,14 +36,26 @@ namespace webbshop2.Service
             return await _context.Products.FindAsync(id);
         }
 
-        public async Task<List<ProductDto>> GetProducts(int catId, int pageIdx)
+        public async Task<List<ProductDto>> GetProducts(int catId, int pageIdx, string search)
         {
-            var products = await _context.Products
-                .OrderBy(p => p.Id)
-                .Include(p => p.Category)
-                .Where(c => c.Category.Id == catId || c.Category.Parent.Id == catId)
-                .Skip(pageIdx * itemsPerLoad).Take(itemsPerLoad)
-                .ToListAsync();
+            List<Product> products;
+            if (catId == 0)
+            {
+                products = await _context.Products
+                    .Where(p => p.Name.Contains(search))
+                    .OrderBy(p => p.Id)
+                    .Include(p => p.Category)
+                    .Skip(pageIdx * itemsPerLoad).Take(itemsPerLoad)
+                    .ToListAsync();
+            } else
+            {
+                products = await _context.Products
+                    .OrderBy(p => p.Id)
+                    .Include(p => p.Category)
+                    .Where(c => c.Category.Id == catId || c.Category.Parent.Id == catId)
+                    .Skip(pageIdx * itemsPerLoad).Take(itemsPerLoad)
+                    .ToListAsync();
+            }
 
             return products.ConvertAll(new Converter<Product, ProductDto>(MakeProductDto));
         }
