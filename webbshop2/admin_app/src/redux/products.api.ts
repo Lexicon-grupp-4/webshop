@@ -2,7 +2,7 @@
 import { ProductDto } from './DomainClasses';
 import { Product } from './products.slice';
 
-function transformProducts(prods: Product[]) {
+export function transformProducts(prods: Product[]) {
     prods.forEach(p => {
         p.display = true
     });

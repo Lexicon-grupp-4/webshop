@@ -11,6 +11,7 @@ namespace webbshop2.Controllers
     {
         public int CatId { get; set; }
         public int PageIdx { get; set; }
+        public string Search { get; set; }
     }
 
     [ApiController]
@@ -27,7 +28,7 @@ namespace webbshop2.Controllers
         [HttpGet]
         public async Task<IEnumerable<ProductDto>> GetProducts([FromQuery] ProdsQuery prods)
         {
-            return await productsService.GetProducts(prods.CatId, prods.PageIdx);
+            return await productsService.GetProducts(prods.CatId, prods.PageIdx, prods.Search);
         }
 
         [Authorize(Roles = "Admin")]

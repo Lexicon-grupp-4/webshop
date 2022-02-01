@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice, /*PayloadAction*/ } from '@reduxjs/toolkit';
 import { RootState, /*AppThunk*/ } from './store';
 import { ProductDto } from './DomainClasses';
-import { fetchProducts } from './products.api'
+import { fetchProducts } from './products.api';
+import { transformProducts } from './products.api';
 
 export interface ProductsState {
     isLoading: boolean;
-    products: Product[];
+    activeProduct?: Product;
+    products: Product[]; // no used atm. maybe we will buffer some products
 }
 
 export interface Product extends ProductDto {
@@ -13,13 +15,8 @@ export interface Product extends ProductDto {
 }
 
 const initialState: ProductsState = {
-    products: [], isLoading: false
+    activeProduct: undefined, isLoading: false, products: []
 };
-
-export interface ProductsState {
-    isLoading: boolean;
-    products: Product[];
-}
 
 export const fetchProductsAsync = createAsyncThunk(
     'products/fetch',
@@ -33,8 +30,17 @@ export const productsSlice = createSlice({
     name: 'products',
     initialState,
     reducers: {
-        receive: (state, action) => {
-            state.products = [...state.products, ...action.payload];
+        setActiveProduct: (state, action) => {
+            if (!!action.payload) {
+                const prods = [action.payload];
+                transformProducts(prods);
+                state.activeProduct = prods[0];
+            } else {
+                console.log('empty payload');
+            }
+        },
+        clearActiveProduct: (state) => {
+            state.activeProduct = undefined;
         }
     },
     extraReducers: (builder) => {
@@ -44,8 +50,9 @@ export const productsSlice = createSlice({
     }
 });
 
-export const { receive } = productsSlice.actions;
+export const { setActiveProduct, clearActiveProduct } = productsSlice.actions;
 
 export const selectProducts = (state: RootState) => state.products.products;
+export const selectActiveProduct = (state: RootState) => state.products.activeProduct;
 
 export default productsSlice.reducer;

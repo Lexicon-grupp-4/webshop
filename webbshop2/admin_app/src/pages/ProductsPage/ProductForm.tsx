@@ -1,71 +1,73 @@
+import { useEffect } from 'react';
 import { Button, Form, Row, Col } from 'react-bootstrap';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useAppSelector } from '../../redux/hooks';
 import { selectCategories } from '../../redux/categories.slice';
 import { ProductDto } from '../../redux/DomainClasses';
 import { postWithToken } from '../../helpers/fetching';
+import { selectActiveProduct, clearActiveProduct } from '../../redux/products.slice';
+import { clear } from 'console';
 
 type Inputs = {
-    productName: string;
+    name: string;
     price: number;
     category: any;
-    longDescription: string;
+    description: string;
     quantity: number;
 };
 
 export default function ProductForm() {
     const categories = useAppSelector(selectCategories);
+    const activeProduct = useAppSelector(selectActiveProduct);
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors, touchedFields, isDirty, isValid },
-    } = useForm<Inputs>({ mode: 'onChange' });
+    } = useForm<Inputs>({ mode: 'onChange', defaultValues: activeProduct });
+    useEffect(() => {
+        reset(activeProduct);
+    }, [reset, activeProduct]);
     const onSubmit: SubmitHandler<Inputs> = (input) => {
         const product: ProductDto = {
-            name: input.productName,
+            name: input.name,
             price: input.price,
             categoryId: parseInt(input.category),
-            description: input.longDescription,
+            description: input.description,
             quantity: input.quantity
         };
         postWithToken(`/api/products`, product)
             .then(response => {
                 if (!response.ok) {
-                    // setLoginFailure(true);
                     throw Error('posting product');
                 }
                 return response.json() as Promise<ProductDto>;
             })
             .then((resp: ProductDto) => {
                 reset();
-                // dispatch(loginSuccess(loginResp.user));
-                // setToken(loginResp.jwt);
             })
             .catch(() => {
-                // removeToken();
             });
-        // dispatch(attemptLogin());
     };
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group className="mb-3">
                 <Form.Label>
-                    Product Namn
+                    Product Namn 
                 </Form.Label>
-                <Form.Control 
-                    isInvalid={!!errors.productName}
-                    isValid={touchedFields.productName && !errors.productName}
-                    {...register('productName', { required: true, maxLength: 50 })}
+                <Form.Control
+                    isInvalid={!!errors.name}
+                    isValid={touchedFields.name && !errors.name}
+                    {...register('name', { required: true, maxLength: 50 })}
                 />
-                {errors.productName && <span>Produkt namn krävs</span>}
+                {errors.name && <span>Produkt namn krävs</span>}
                 <Form.Text className="text-muted">
                     Produktnamn inklusvive Brand name
                 </Form.Text>
             </Form.Group>
             <Row className="mb-3">
-                <Form.Group as={Col} controlId="formPrice">
+                <Form.Group as={Col} controlId="price">
                     <Form.Label>Pris</Form.Label>
                     <Form.Control
                         type="number"
@@ -74,7 +76,7 @@ export default function ProductForm() {
                         placeholder="pris i kronor"
                     />
                 </Form.Group>
-                <Form.Group as={Col} controlId="formQuantity">
+                <Form.Group as={Col} controlId="quantity">
                     <Form.Label>Antal</Form.Label>
                     <Form.Control
                         type="number"
@@ -94,9 +96,9 @@ export default function ProductForm() {
                 <Form.Label>Längre Beskrivning</Form.Label>
                 <Form.Control
                     as="textarea"
-                    isInvalid={!!errors.longDescription}
+                    isInvalid={!!errors.description}
                     rows={3}
-                    {...register("longDescription", { required: true, minLength: 2 })}
+                    {...register("description", { required: true, minLength: 2 })}
                 />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -114,6 +116,10 @@ export default function ProductForm() {
             </Form.Group>
             <Button disabled={!isDirty || !isValid} variant="primary" type="submit">
                 Skapa
+            </Button>
+            {'\u00A0'}
+            <Button onClick={() => reset()} variant="primary">
+                Rensa
             </Button>
         </Form>
     )
