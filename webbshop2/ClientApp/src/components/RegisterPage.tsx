@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 export default function RegisterPage() {
 
     const {
-        register,
+        register,watch,
         handleSubmit,
         formState: { errors, isDirty, isValid },
     } = useForm<Inputs>({ mode: "onChange" });
@@ -19,6 +19,7 @@ export default function RegisterPage() {
         userName: string;
         email: string;
         password: string;
+        passwordConfirm: string;
     };
 
     const dispatch = useDispatch();
@@ -26,6 +27,7 @@ export default function RegisterPage() {
     var [email] = useState('');
     var [password] = useState('');
     const [registrationFailure, setRegistrationFailure] = useState(false);
+
 
     const onSubmit: SubmitHandler<Inputs> = (input) => {
         userName = input.userName;
@@ -52,31 +54,35 @@ export default function RegisterPage() {
     }
     return (
         <div className="Login">
-            <h2>Register</h2>
+            <h2>Registrering</h2>
             <Form onSubmit={handleSubmit(onSubmit)}>
-                <p>Tip: Password requires at least one number, a special charactera and a capital letter (min length 7) </p>
+                <p>Tips: L&ouml;senordet kr&auml;ver minst ett nummer, ett special tecken och en stor bokstav (min l&auml;ngd 7) </p>
                 {registrationFailure && (
-                    <Alert color="danger"> Failed to register</Alert>
+                    <Alert color="danger"> Gick ej att registrera</Alert>
                 )}
                 <br />
-                <input type="text" placeholder="Username" {...register("userName", { required: true, maxLength: 20 })} />
-                {errors.userName && <span>Name is required</span>}
+                <input type="text" placeholder="Anv&auml;ndarnam" {...register("userName", { required: true, maxLength: 20 })} />
+                {errors.userName && <span>Anv&auml;ndarnam kr&auml;vs</span>}
                 <br />
                 <input type="email" placeholder="Email" {...register("email", {
                     required: true, maxLength: 30, pattern: {
                         value: /\S+@\S+\.\S+/,
-                        message: "Does not match email format"
+                        message: "Ej korrekt emailformat"
                     }})} />
                 {errors.email && errors.email.message}
                 <br />
                 <input type="password" placeholder="********" {...register("password", { required: true, maxLength: 30 })} />
-                {errors.password && <span>Password is required</span>}
+                {errors.password && <span>L&ouml;senord kr&auml;vs</span>}
                 <br />
-                <input type="submit" value="Register" disabled={!isDirty || !isValid} />
+                <input type="password" placeholder="repitera l&ouml;senord" {...register("passwordConfirm", { required: true, maxLength: 30, validate: (value) => value === watch('password') })} />
+                {errors.passwordConfirm && <span>L&ouml;senorden m&aring;ste vara lika</span>}
+                <br />
+                
+                <input type="submit" value="Registrera" disabled={!isDirty || !isValid} />
 
             </Form>
 
-            <Link to="/login">Login</Link>
+            <Link to="/login">Logga in</Link>
         </div>
     );
 }

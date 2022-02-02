@@ -2,7 +2,7 @@ import { useForm, SubmitHandler, } from "react-hook-form";
 import './LoginPage.css';
 import { Link } from "react-router-dom";
 import React, { useState } from 'react';
-import { Form, Alert } from 'reactstrap';
+import { Form, Alert,Card } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 import {
     CREDENTIALS_LOGIN_SUCCESS,
@@ -62,24 +62,24 @@ export default function LoginPage() {
 
     return (
         <div className="Login">
-            <h2>Sign In</h2>
-            <p>Tip: Login with username: user10, password: Lexicon1&</p>
+            <h2>Inloggning</h2>
+                <p>Tips: Logga in med anv&auml;ndarnamnet: user10, l&ouml;senord: Lexicon1&</p>
 
             <Form onSubmit={handleSubmit(onSubmit)}>
                 {loginFailure && (
-                    <Alert color="danger"> Failed to login</Alert>
+                    <Alert color="danger">Gick inte att logga in</Alert>
                 )}
-                <input type="text" placeholder="Username" {...register("userName", { required: true, maxLength: 20 })} />
-                {errors.userName && <span>Username is required</span>}
+                    <input type="text" placeholder="Anv&auml;ndarnamn" {...register("userName", { required: true, maxLength: 20 })} />
+                {errors.userName && <span>Anvn&auml;darnamn kr&auml;vs</span>}
                 <br />
                 <input type="password" placeholder="********" {...register("password", { required: true, maxLength: 30 })} />
-                {errors.password && <span>Password is required</span>}
+                {errors.password && <span>L&ouml;senord kr&auml;vs</span>}
                 <br />
-                <input type="submit" value="Login" disabled={!isDirty || !isValid} />
+                <input type="submit" value="Logga in" disabled={!isDirty || !isValid} />
 
             </Form>
 
-            <Link to="/register">Register new Account</Link>
-        </div>
+            <Link to="/register">Registrera nytt Konto</Link>
+            </div>
     );
 }
