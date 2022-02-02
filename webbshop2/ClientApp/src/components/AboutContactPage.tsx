@@ -20,7 +20,7 @@ export default function AboutContactPage() {
                 <li className="list-inline-item"><a href='https://github.com/magbor21'>Magnus</a></li>
             </ul>
 
-            <h3>Om Projektet: [Fylls i mer utförligt senare.....]</h3>
+            <h3>Om Projektet</h3>
 
             <h2>Webbshop Projektspecifikationer</h2><br/>
 

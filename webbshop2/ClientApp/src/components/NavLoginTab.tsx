@@ -16,13 +16,13 @@ export default function NavLoginTab() {
         return (
             <NavItem onClick={logout}>
                 {/* maybe its risky to do action on link */}
-                <NavLink tag={Link}  className="text-dark" to="/login">Logout {user.name}</NavLink>
+                <NavLink tag={Link}  className="text-dark" to="/login">Logga ut {user.name}</NavLink>
             </NavItem>
         )
     }
     return (
         <NavItem>
-            <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
+            <NavLink tag={Link} className="text-dark" to="/login">Logga in</NavLink>
         </NavItem>
     )
 }
