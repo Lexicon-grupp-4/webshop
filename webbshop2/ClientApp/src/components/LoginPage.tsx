@@ -70,7 +70,7 @@ export default function LoginPage() {
                     <Alert color="danger">Gick inte att logga in</Alert>
                 )}
                     <input type="text" placeholder="Anv&auml;ndarnamn" {...register("userName", { required: true, maxLength: 20 })} />
-                {errors.userName && <span>Anvn&auml;darnamn kr&auml;vs</span>}
+                {errors.userName && <span>Anv&auml;darnamn kr&auml;vs</span>}
                 <br />
                 <input type="password" placeholder="********" {...register("password", { required: true, maxLength: 30 })} />
                 {errors.password && <span>L&ouml;senord kr&auml;vs</span>}

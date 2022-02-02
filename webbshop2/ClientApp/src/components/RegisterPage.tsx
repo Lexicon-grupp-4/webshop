@@ -56,7 +56,7 @@ export default function RegisterPage() {
         <div className="Login">
             <h2>Registrering</h2>
             <Form onSubmit={handleSubmit(onSubmit)}>
-                <p>Tips: L&ouml;senordet kr&auml;ver minst ett nummer, ett special tecken och en stor bokstav (min l&auml;ngd 7) </p>
+                <p>Tips: L&ouml;senordet kr&auml;ver minst ett nummer, ett specialtecken och en stor bokstav (min l&auml;ngd 7) </p>
                 {registrationFailure && (
                     <Alert color="danger"> Gick ej att registrera</Alert>
                 )}
@@ -67,14 +67,14 @@ export default function RegisterPage() {
                 <input type="email" placeholder="Email" {...register("email", {
                     required: true, maxLength: 30, pattern: {
                         value: /\S+@\S+\.\S+/,
-                        message: "Ej korrekt emailformat"
+                        message: "Ej korrekt format Email address"
                     }})} />
                 {errors.email && errors.email.message}
                 <br />
                 <input type="password" placeholder="********" {...register("password", { required: true, maxLength: 30 })} />
                 {errors.password && <span>L&ouml;senord kr&auml;vs</span>}
                 <br />
-                <input type="password" placeholder="repitera l&ouml;senord" {...register("passwordConfirm", { required: true, maxLength: 30, validate: (value) => value === watch('password') })} />
+                <input type="password" placeholder="Repetera l&ouml;senord" {...register("passwordConfirm", { required: true, maxLength: 30, validate: (value) => value === watch('password') })} />
                 {errors.passwordConfirm && <span>L&ouml;senorden m&aring;ste vara lika</span>}
                 <br />
                 
