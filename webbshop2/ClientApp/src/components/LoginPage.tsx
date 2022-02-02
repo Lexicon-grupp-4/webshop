@@ -2,7 +2,7 @@ import { useForm, SubmitHandler, } from "react-hook-form";
 import './LoginPage.css';
 import { Link } from "react-router-dom";
 import React, { useState } from 'react';
-import { Form, Alert,Card } from 'reactstrap';
+import { Form, Alert } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 import {
     CREDENTIALS_LOGIN_SUCCESS,
