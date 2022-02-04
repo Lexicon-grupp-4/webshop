@@ -5,8 +5,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { selectCategories } from '../../redux/categories.slice';
 import { ProductDto } from '../../redux/DomainClasses';
 import { postWithToken } from '../../helpers/fetching';
-import { selectActiveProduct, clearActiveProduct } from '../../redux/products.slice';
-import { clear } from 'console';
+import { selectActiveProduct } from '../../redux/products.slice';
 
 type Inputs = {
     name: string;

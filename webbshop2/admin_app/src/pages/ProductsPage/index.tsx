@@ -3,9 +3,9 @@ import ProductForm from './ProductForm';
 import SearchProducts from './SearchProducts';
 
 export default function ProductsPage() {
-    function test(){
-        console.log('running test');
-    }
+    // function test(){
+    //     console.log('running test');
+    // }
     return (
         <Container>
             <Row>
@@ -21,7 +21,7 @@ export default function ProductsPage() {
                     <br />
                     <h1>Sök</h1>
                     <br />
-                    <SearchProducts test={test} />
+                    <SearchProducts />
                 </Col>
             </Row>
         </Container>
