@@ -2,11 +2,15 @@
     font-family: TitilliumWeb, Arial, serif;
     text-transform: uppercase;
     cursor: pointer;
+    text-align: center;
 }
 
-.categories-menu-subcat1-name {
-    color: var(--darkGreen);
-    cursor: pointer;
+.categories-menu-cat-name:hover {
+    background-color: var(--softGreen);
+}
+
+.categories-menu-cat-name-below {
+    background-color: var(--softGreen);
 }
 
 .categories-menu-subcat1-name:hover {
@@ -14,9 +18,14 @@
 }
 
 .categories-menu-subcat1-active {
-    background-color: var(--darkGreen);
+    background-color: var(--darkGreen) !important;
     color: white !important;
 }
 .categories-menu-subcat1-active:hover {
     color: white;
+}
+
+.categories-menu-down {
+    padding: 5px 25px;
+    margin: 0;
 }
