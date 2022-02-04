@@ -20,8 +20,9 @@ code {
 :root {
     --blue: #1e90ff;
     --darkGreen: #006400;
+    --softGreen: #b2d0b2;
     --lightGrey1: #f0edee;
-    --dark: #222;
+    --dark: rgb(149, 68, 68);
 }
 
 
